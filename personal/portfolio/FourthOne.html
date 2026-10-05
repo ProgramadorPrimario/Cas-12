@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEBASTIÁN ALVARADO — Kinetic Living Canvas CV</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Instrument Serif, Syne, Space Mono, Kalam -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Kalam:wght@300;400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Instrument Serif', 'serif'],
+                        display: ['Syne', 'sans-serif'],
+                        hand: ['Kalam', 'cursive'],
+                        mono: ['Space Mono', 'monospace'],
+                    },
+                    colors: {
+                        nightBg: '#0b0813',
+                        nightCard: 'rgba(23, 17, 36, 0.75)',
+                        nightBorder: 'rgba(255, 255, 255, 0.12)',
+                        lovePink: '#ff2a75',
+                        lovePurple: '#9d4edd',
+                        warmAmber: '#ffb703',
+                        medellinCyan: '#00f5d4',
+                        softIvory: '#fbf8f3',
+                    },
+                    boxShadow: {
+                        'glow-pink': '0 0 35px rgba(255, 42, 117, 0.35)',
+                        'glow-purple': '0 0 35px rgba(157, 78, 221, 0.35)',
+                        'glow-cyan': '0 0 35px rgba(0, 245, 212, 0.35)',
+                        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0b0813;
+            color: #fbf8f3;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(255, 42, 117, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 85% 60%, rgba(157, 78, 221, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 50% 90%, rgba(0, 245, 212, 0.1) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        /* Particle Overlay Canvas */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Kinetic Floating Motion */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(1.5deg); }
+        }
+        @keyframes floatReverse {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(14px) rotate(-2deg); }
+        }
+        @keyframes pulseAura {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.08); }
+        }
+        @keyframes kineticMarquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .animate-float-1 { animation: floatSlow 7s ease-in-out infinite; }
+        .animate-float-2 { animation: floatReverse 8.5s ease-in-out infinite; }
+        .animate-pulse-aura { animation: pulseAura 4s ease-in-out infinite; }
+        .animate-marquee { display: flex; width: 200%; animation: kineticMarquee 22s linear infinite; }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(23, 17, 36, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+            transform-style: preserve-3d;
+        }
+        .glass-card:hover {
+            border-color: rgba(255, 42, 117, 0.5);
+            box-shadow: 0 16px 40px rgba(255, 42, 117, 0.2);
+        }
+
+        /* Dynamic Morphing Blob */
+        .morphing-blob {
+            background: linear-gradient(135deg, #ff2a75, #9d4edd, #00f5d4);
+            background-size: 200% 200%;
+            animation: blobMorph 10s ease-in-out infinite, gradientShift 6s ease infinite;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+        @keyframes blobMorph {
+            0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+            50% { border-radius: 30% 60% 70% 30% / 50% 60% 30% 60%; }
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0b0813; }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #ff2a75, #9d4edd);
+            border-radius: 4px;
+        }
+
+        /* Selection styling */
+        ::selection { background: #ff2a75; color: #ffffff; }
+
+        /* Scroll skew container effect */
+        .skew-on-scroll {
+            will-change: transform;
+            transition: transform 0.1s ease-out;
+        }
+    </style>
+</head>
+<body class="font-display antialiased leading-relaxed text-softIvory selection:bg-lovePink selection:text-white">
+
+    <!-- Interactive Glowing Particle & Heart Trail Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Floating Kinetic Header Controls -->
+    <header class="fixed top-4 left-0 right-0 z-50 px-4 md:px-8 pointer-events-none">
+        <div class="max-w-7xl mx-auto flex items-center justify-between pointer-events-auto">
+            
+            <!-- Live Status & Medellín Badge -->
+            <div class="glass-card px-4 py-2 rounded-full flex items-center gap-3 shadow-glass">
+                <span class="relative flex h-3 w-3">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-lovePink opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-lovePink"></span>
+                </span>
+                <span class="font-mono text-xs font-bold tracking-tight text-white">SEBASTIÁN ALVARADO</span>
+                <span class="hidden sm:inline font-mono text-[10px] bg-white/10 px-2 py-0.5 rounded text-white/70">15 Y/O</span>
+                <span class="font-hand text-base text-medellinCyan hidden md:inline">Medellín 🇨🇴 • Senior '26</span>
+            </div>
+
+            <!-- Sound Synth & Kinetic Visual Toggle -->
+            <div class="glass-card px-3 py-1.5 rounded-full flex items-center gap-3 shadow-glass text-xs">
+                
+                <!-- Audio Ambient Synth Toggle -->
+                <button onclick="toggleAudioSynth()" id="synth-btn" class="px-3 py-1 rounded-full font-mono text-[11px] bg-white/10 hover:bg-lovePink/20 hover:border-lovePink border border-white/10 transition flex items-center gap-2">
+                    <i id="synth-icon" class="fa-solid fa-compact-disc text-lovePink"></i>
+                    <span class="hidden sm:inline">Ambient Synth: <strong id="synth-status" class="text-white/70">OFF</strong></span>
+                </button>
+
+                <!-- Kinetic Physics Burst Button -->
+                <button onclick="triggerKineticExplosion(event)" class="w-8 h-8 rounded-full bg-gradient-to-tr from-lovePink to-lovePurple flex items-center justify-center hover:scale-110 active:scale-95 transition shadow-glow-pink" title="Release Kinetic Energy Burst">
+                    <i class="fa-solid fa-heart text-white text-xs animate-bounce"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Scroll Container with Motion Physics -->
+    <main class="relative pt-28 pb-32 px-4 md:px-12 max-w-7xl mx-auto space-y-32 sm:space-y-44 skew-on-scroll">
+
+        <!-- ========================================== -->
+        <!-- HERO: DATES, ROLE & KINETIC INTRODUCTION  -->
+        <!-- ========================================== -->
+        <section id="hero" class="relative pt-8 sm:pt-16 min-h-[80vh] flex flex-col justify-center">
+            
+            <!-- Background Breathing Glow Orbs -->
+            <div class="absolute -top-20 left-10 w-72 h-72 rounded-full bg-lovePink/20 blur-[100px] pointer-events-none animate-pulse-aura"></div>
+            <div class="absolute top-1/3 right-10 w-96 h-96 rounded-full bg-lovePurple/20 blur-[120px] pointer-events-none animate-pulse-aura" style="animation-delay: 2s;"></div>
+
+            <!-- Header Date & Status Stamp -->
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-8 font-mono text-xs border-b border-white/10 pb-4">
+                <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 bg-gradient-to-r from-lovePink to-lovePurple text-white font-bold text-[10px] rounded-full shadow-glow-pink">
+                        TIMELINE 2025 — 2026
+                    </span>
+                    <span class="text-white/50">•</span>
+                    <span class="text-medellinCyan font-semibold tracking-wider">MEDELLÍN HIGH SCHOOL SENIOR</span>
+                </div>
+                
+                <div class="font-hand text-xl text-warmAmber animate-float-1">
+                    "I don't follow digital rules, I invent new ones."
+                </div>
+            </div>
+
+            <!-- Kinetic Main Title -->
+            <div class="relative z-10 mb-8 space-y-2">
+                <span class="font-mono text-xs font-bold uppercase tracking-widest text-medellinCyan block">
+                    // CREATIVE ENGINEER & FULL-STACK DEVELOPER
+                </span>
+                <h1 class="font-serif font-normal text-6xl sm:text-8xl md:text-9xl tracking-tight leading-[0.88] text-white">
+                    Sebastián <br>
+                    <span class="italic font-serif text-transparent bg-clip-text bg-gradient-to-r from-lovePink via-lovePurple to-medellinCyan pl-4 sm:pl-16">
+                        Alvarado.
+                    </span>
+                </h1>
+            </div>
+
+            <!-- Hero Statement Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                
+                <!-- Main Statement Glass Card -->
+                <div class="lg:col-span-8 glass-card p-6 sm:p-10 rounded-3xl shadow-glass flex flex-col justify-between relative overflow-hidden group">
+                    <div class="absolute -right-16 -bottom-16 w-48 h-48 morphing-blob opacity-20 pointer-events-none"></div>
+
+                    <div>
+                        <div class="flex items-center justify-between font-mono text-xs text-white/50 border-b border-white/10 pb-4 mb-6">
+                            <span>DEVELOPMENT ROLE & PERSPECTIVE</span>
+                            <span class="text-lovePink font-hand text-lg">15 Years Old • Medellín, CO</span>
+                        </div>
+
+                        <p class="font-display text-xl sm:text-3xl text-white font-medium leading-snug mb-6">
+                            I am a 15-year-old software developer and systems builder from Medellín. I design <span class="text-transparent bg-clip-text bg-gradient-to-r from-lovePink to-warmAmber font-bold">interactive web ecosystems</span>, full-stack software logic, and hardware tools driven by an unyielding love for <span class="text-medellinCyan font-serif italic">whatever enters my life for the first time</span>.
+                        </p>
+
+                        <p class="font-mono text-xs sm:text-sm text-white/70 leading-relaxed mb-8">
+                            I transform abstract ideas into living code, blending artistic expression with algorithmic efficiency. Every pixel and backend system I craft is an experiment in breaking conventional constraints.
+                        </p>
+                    </div>
+
+                    <!-- Interactive Kinetic Physics Pill Tags -->
+                    <div class="flex flex-wrap items-center gap-3 font-mono text-xs pt-4 border-t border-white/10">
+                        <span class="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 hover:border-lovePink transition text-white">
+                            <i class="fa-solid fa-graduation-cap text-lovePink mr-1.5"></i> Senior Class of '26
+                        </span>
+                        <span class="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 hover:border-medellinCyan transition text-white">
+                            <i class="fa-solid fa-code text-medellinCyan mr-1.5"></i> Full-Stack & IoT
+                        </span>
+                        <span class="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 hover:border-warmAmber transition text-warmAmber font-hand text-base">
+                            Curiosity > Rules
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Interactive Novelty Magnet & Status Card -->
+                <div class="lg:col-span-4 glass-card p-6 sm:p-8 rounded-3xl shadow-glass flex flex-col justify-between text-center relative overflow-hidden group">
+                    <div class="space-y-4">
+                        <div class="font-mono text-xs text-white/50 uppercase tracking-widest">KINETIC MAGNET</div>
+                        
+                        <!-- Morphing Central Artwork Blob -->
+                        <div onclick="burstNoveltyParticles(event)" class="w-32 h-32 mx-auto morphing-blob flex items-center justify-center cursor-pointer hover:scale-110 active:scale-95 transition shadow-glow-purple group">
+                            <i class="fa-solid fa-bolt text-4xl text-white drop-shadow-lg group-hover:rotate-12 transition"></i>
+                        </div>
+
+                        <div class="font-serif text-2xl text-white italic">"Constant Motion & Discovery"</div>
+                        <p class="font-mono text-xs text-white/60">Tap the liquid core above to release energy bursts!</p>
+                    </div>
+
+                    <div class="font-hand text-xl text-medellinCyan mt-6 pt-4 border-t border-white/10">
+                        📍 Medellín Creative Studio
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ========================================== -->
+        <!-- CHAPTER 01: ABOUT ME (WHO, WHAT, WHAT I LIKE) -->
+        <!-- ========================================== -->
+        <section id="about" class="space-y-12">
+            
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-white/15 pb-4 gap-2">
+                <div>
+                    <span class="font-mono text-xs text-lovePink uppercase tracking-widest">// CHAPTER 01</span>
+                    <h2 class="font-serif text-4xl sm:text-6xl text-white">About Me — Who, What & What I Like</h2>
+                </div>
+                <span class="font-hand text-2xl text-medellinCyan">"Learning through artistic destruction"</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                
+                <!-- Pillar 1: Who Am I -->
+                <div class="lg:col-span-4 glass-card p-7 rounded-3xl shadow-glass flex flex-col justify-between hover:-translate-y-2 transition duration-300">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-lovePink to-lovePurple flex items-center justify-center font-mono font-bold text-white text-lg shadow-glow-pink">
+                            01
+                        </div>
+                        <h3 class="font-serif text-3xl text-white">Who Am I?</h3>
+                        <p class="font-mono text-xs sm:text-sm text-white/70 leading-relaxed">
+                            I am <strong class="text-white">Sebastián Alvarado</strong>. At 15 years old, residing in <strong class="text-medellinCyan">Medellín, Colombia</strong>, I am completing my senior high school year (Class of 2026). I operate at the intersection of youthful creative rebellion and serious engineering.
+                        </p>
+                        <p class="font-mono text-xs text-white/60 leading-relaxed">
+                            I don't wait for formal permissions to build. When an intriguing problem arises, I immediately construct software to decode it.
+                        </p>
+                    </div>
+                    <div class="font-hand text-xl text-warmAmber pt-6 border-t border-white/10 mt-6">
+                        ↳ Medellín Native • High School Senior '26
+                    </div>
+                </div>
+
+                <!-- Pillar 2: What I Do -->
+                <div class="lg:col-span-4 glass-card p-7 rounded-3xl shadow-glass flex flex-col justify-between hover:-translate-y-2 transition duration-300">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-medellinCyan to-lovePurple flex items-center justify-center font-mono font-bold text-nightBg text-lg shadow-glow-cyan">
+                            02
+                        </div>
+                        <h3 class="font-serif text-3xl text-white">What I Do?</h3>
+                        <p class="font-mono text-xs sm:text-sm text-white/70 leading-relaxed">
+                            I craft web applications, build full-stack backend APIs, program IoT microcontrollers (sensors, ESP32), and design interactive generative art tools.
+                        </p>
+                        <ul class="font-mono text-xs text-white/80 space-y-2.5 pt-2">
+                            <li class="flex items-center gap-2">
+                                <span class="text-lovePink font-bold">➔</span> Full-Stack JavaScript & Python
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-lovePink font-bold">➔</span> Embedded Microcontrollers & Sensors
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-lovePink font-bold">➔</span> Interactive Canvas & Sound Engines
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="font-hand text-xl text-medellinCyan pt-6 border-t border-white/10 mt-6">
+                        ↳ Systems, Code & Kinetic Logic
+                    </div>
+                </div>
+
+                <!-- Pillar 3: What I Like (Interactive Novelty Radar) -->
+                <div class="lg:col-span-4 glass-card p-7 rounded-3xl shadow-glass flex flex-col justify-between relative overflow-hidden hover:-translate-y-2 transition duration-300">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-warmAmber to-lovePink flex items-center justify-center font-mono font-bold text-nightBg text-lg shadow-glow-pink">
+                            03
+                        </div>
+                        <h3 class="font-serif text-3xl text-white">What I Like?</h3>
+                        <p class="font-mono text-xs text-white/70">
+                            My fundamental driving force: <strong class="text-white">The Novelty Instinct</strong>. Anything unseen or unfamiliar instantly captures my complete focus.
+                        </p>
+
+                        <!-- Novelty Radar Interactive Generator -->
+                        <div class="bg-white/5 border border-white/10 rounded-2xl p-5 text-center space-y-3">
+                            <span class="font-mono text-[10px] text-medellinCyan uppercase tracking-widest block">INTERACTIVE NOVELTY RADAR</span>
+                            <div id="radar-text" class="font-serif text-2xl text-white italic min-h-[3.5rem] flex items-center justify-center transition-opacity duration-300">
+                                "Unfamiliar Programming Paradigms"
+                            </div>
+                            <button onclick="spinNoveltyRadar()" class="w-full py-2.5 bg-gradient-to-r from-lovePink to-lovePurple text-white font-mono text-xs rounded-xl hover:shadow-glow-pink transition flex items-center justify-center gap-2 font-bold">
+                                <i class="fa-solid fa-arrows-rotate animate-spin-slow"></i>
+                                <span>Discover Next Obsession</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="font-hand text-xl text-warmAmber pt-6 border-t border-white/10 mt-6">
+                        ↳ Eternal curiosity
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- CHAPTER 02: EDUCATION & EXPERIENCE          -->
+        <!-- ========================================== -->
+        <section id="experience" class="space-y-12">
+            
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-white/15 pb-4 gap-2">
+                <div>
+                    <span class="font-mono text-xs text-medellinCyan uppercase tracking-widest">// CHAPTER 02</span>
+                    <h2 class="font-serif text-4xl sm:text-6xl text-white">Education & Experience</h2>
+                </div>
+                <p class="font-mono text-xs text-white/50">Milestones & Projects (2025 — 2026)</p>
+            </div>
+
+            <!-- Experience Card 1: TDeA Works -->
+            <article class="glass-card p-6 sm:p-10 rounded-3xl shadow-glass relative group hover:border-lovePink/40 transition">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    <div class="lg:col-span-8 space-y-4">
+                        <div class="flex flex-wrap items-center gap-3 font-mono text-xs">
+                            <span class="px-3 py-1 bg-lovePink text-white font-bold rounded-full shadow-glow-pink">
+                                ACADEMIC LOGIC
+                            </span>
+                            <span class="text-white/60">TECNOLÓGICO DE ANTIOQUIA (TDeA)</span>
+                            <span class="text-medellinCyan font-bold">2025 — 2026</span>
+                        </div>
+
+                        <h3 class="font-serif text-3xl sm:text-4xl text-white font-normal">
+                            TDeA Academic Software & Algorithmic Engineering
+                        </h3>
+
+                        <p class="font-mono text-xs sm:text-sm text-white/70 leading-relaxed">
+                            Through specialized academic labs and software development workshops at <strong class="text-white">Tecnológico de Antioquia (TDeA)</strong>, I have built systems around algorithm optimization, data structures, and relational backend models.
+                        </p>
+
+                        <!-- Interactive TDeA Code Logic Simulator Sandbox -->
+                        <div class="bg-nightBg/90 border border-white/10 p-4 rounded-2xl space-y-3 font-mono text-xs">
+                            <div class="flex justify-between items-center text-white/50 text-[10px]">
+                                <span>TDEA_ALGORITHM_PREVIEW.JS</span>
+                                <span class="text-medellinCyan">✓ PARSED SUCCESSFULLY</span>
+                            </div>
+                            <pre class="text-lovePink overflow-x-auto p-2 bg-black/40 rounded-lg text-[11px]"><code>function optimizeMedellinRoutes(data) {
+  return data.filter(node => node.efficiency > 0.85).sort();
+}</code></pre>
+                            <button onclick="runTDeASimulation()" class="px-4 py-1.5 bg-white/10 hover:bg-medellinCyan hover:text-nightBg text-white rounded-lg transition font-bold text-[11px] flex items-center gap-2">
+                                <i class="fa-solid fa-play text-xs"></i>
+                                <span>Test Execution Output</span>
+                            </button>
+                            <div id="tdea-output" class="hidden text-warmAmber text-[11px] pt-1 italic">
+                                ➔ Output: [ Node_Envigado (98%), Node_Poblado (92%), Node_LaCandelaria (89%) ]
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 font-mono text-[11px] pt-2">
+                            <span class="px-3 py-1 rounded-lg bg-white/5 border border-white/10">Algorithmic Efficiency</span>
+                            <span class="px-3 py-1 rounded-lg bg-white/5 border border-white/10">Relational Databases</span>
+                            <span class="px-3 py-1 rounded-lg bg-white/5 border border-white/10">TDeA Software Workshops</span>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-4 bg-white/5 border border-white/10 rounded-2xl p-6 text-center space-y-4 flex flex-col justify-between">
+                        <div class="space-y-3">
+                            <i class="fa-solid fa-university text-4xl text-medellinCyan"></i>
+                            <h4 class="font-serif text-2xl text-white">TDeA Lab Notes</h4>
+                            <p class="font-mono text-xs text-white/60">Hands-on software logic architecture coursework.</p>
+                        </div>
+                        <button onclick="openModal('tdea')" class="w-full py-2.5 bg-gradient-to-r from-lovePink to-lovePurple text-white font-mono text-xs rounded-xl hover:shadow-glow-pink transition font-bold">
+                            Inspect TDeA Dossier ➔
+                        </button>
+                    </div>
+
+                </div>
+            </article>
+
+            <!-- Experience Card 2: Quipux Classes -->
+            <article class="glass-card p-6 sm:p-10 rounded-3xl shadow-glass relative group hover:border-medellinCyan/40 transition">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    <div class="lg:col-span-8 space-y-4">
+                        <div class="flex flex-wrap items-center gap-3 font-mono text-xs">
+                            <span class="px-3 py-1 bg-medellinCyan text-nightBg font-bold rounded-full shadow-glow-cyan">
+                                TECH TRAINING
+                            </span>
+                            <span class="text-white/60">QUIPUX INNOVATION LABS</span>
+                            <span class="text-medellinCyan font-bold">2025 — 2026</span>
+                        </div>
+
+                        <h3 class="font-serif text-3xl sm:text-4xl text-white font-normal">
+                            Quipux Software Systems & Smart Transit Architecture
+                        </h3>
+
+                        <p class="font-mono text-xs sm:text-sm text-white/70 leading-relaxed">
+                            Participating in technical software classes at <strong class="text-white">Quipux</strong> (pioneers in intelligent transport and city telemetry). Focused on enterprise software design patterns, backend API streams, and real-time transit traffic matrix logic.
+                        </p>
+
+                        <!-- Interactive Quipux Smart Transit Traffic Matrix -->
+                        <div class="bg-nightBg/90 border border-white/10 p-4 rounded-2xl space-y-3">
+                            <div class="flex justify-between items-center font-mono text-[10px] text-white/50">
+                                <span>QUIPUX SMART TRAFFIC CONTROLLER</span>
+                                <span id="quipux-status-text" class="text-emerald-400 font-bold">STATUS: FLOW OPTIMAL</span>
+                            </div>
+
+                            <div class="flex items-center justify-center gap-8 py-2">
+                                <div id="q-light-red" class="w-9 h-9 rounded-full bg-red-950 border border-white/20 transition-all duration-300"></div>
+                                <div id="q-light-yellow" class="w-9 h-9 rounded-full bg-amber-950 border border-white/20 transition-all duration-300"></div>
+                                <div id="q-light-green" class="w-9 h-9 rounded-full bg-emerald-500 border border-white/20 shadow-[0_0_20px_#10b981] transition-all duration-300"></div>
+                            </div>
+
+                            <button onclick="cycleQuipuxTraffic()" class="w-full py-2 bg-white/10 hover:bg-white/20 text-white font-mono text-xs rounded-xl transition font-bold">
+                                Cycle Traffic Telemetry Phase
+                            </button>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 font-mono text-[11px] pt-1">
+                            <span class="px-3 py-1 rounded-lg bg-white/5 border border-white/10">Smart Mobility</span>
+                            <span class="px-3 py-1 rounded-lg bg-white/5 border border-white/10">Backend Microservices</span>
+                            <span class="px-3 py-1 rounded-lg bg-white/5 border border-white/10">Quipux Training</span>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-4 bg-white/5 border border-white/10 rounded-2xl p-6 text-center space-y-4 flex flex-col justify-between">
+                        <div class="space-y-3">
+                            <i class="fa-solid fa-traffic-light text-4xl text-lovePink"></i>
+                            <h4 class="font-serif text-2xl text-white">Quipux Systems</h4>
+                            <p class="font-mono text-xs text-white/60">Enterprise software & mobility telemetry coursework.</p>
+                        </div>
+                        <button onclick="openModal('quipux')" class="w-full py-2.5 bg-gradient-to-r from-medellinCyan to-lovePurple text-nightBg font-mono text-xs rounded-xl hover:shadow-glow-cyan transition font-bold">
+                            Inspect Quipux Syllabus ➔
+                        </button>
+                    </div>
+
+                </div>
+            </article>
+
+            <!-- Experience Card 3: Secretaría de Educación Projects -->
+            <article class="glass-card p-6 sm:p-10 rounded-3xl shadow-glass relative group hover:border-warmAmber/40 transition">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    <div class="lg:col-span-8 space-y-4">
+                        <div class="flex flex-wrap items-center gap-3 font-mono text-xs">
+                            <span class="px-3 py-1 bg-warmAmber text-nightBg font-bold rounded-full shadow-glow-pink">
+                                MUNICIPAL INNOVATION
+                            </span>
+                            <span class="text-white/60">SECRETARÍA DE EDUCACIÓN DE MEDELLÍN</span>
+                            <span class="text-medellinCyan font-bold">2025 — 2026</span>
+                        </div>
+
+                        <h3 class="font-serif text-3xl sm:text-4xl text-white font-normal">
+                            Secretaría de Educación Youth Tech Initiatives
+                        </h3>
+
+                        <p class="font-mono text-xs sm:text-sm text-white/70 leading-relaxed">
+                            Active youth developer in municipal tech initiatives sponsored by the <strong class="text-white">Secretaría de Educación de Medellín</strong>. Creating student platforms, STEM hardware prototypes, and representing youth innovation at regional science showcases.
+                        </p>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs pt-1">
+                            <div class="p-3 bg-white/5 border border-white/10 rounded-xl">
+                                <strong class="text-medellinCyan block mb-1">➔ STEM Youth Leadership</strong>
+                                <span class="text-white/60 text-[11px]">Developing interactive web software for public student networks.</span>
+                            </div>
+                            <div class="p-3 bg-white/5 border border-white/10 rounded-xl">
+                                <strong class="text-lovePink block mb-1">➔ Senior Science Showcase</strong>
+                                <span class="text-white/60 text-[11px]">Representing high school youth innovation in Medellín.</span>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 font-mono text-[11px] pt-1">
+                            <span class="px-3 py-1 rounded-lg bg-white/5 border border-white/10">Medellín Public STEM</span>
+                            <span class="px-3 py-1 rounded-lg bg-white/5 border border-white/10">Youth Tech Network</span>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-4 bg-white/5 border border-white/10 rounded-2xl p-6 text-center space-y-4 flex flex-col justify-between">
+                        <div class="space-y-3">
+                            <i class="fa-solid fa-award text-4xl text-warmAmber"></i>
+                            <h4 class="font-serif text-2xl text-white">Youth Initiatives</h4>
+                            <p class="font-mono text-xs text-white/60">Municipal education & tech leadership.</p>
+                        </div>
+                        <button onclick="openModal('secretaria')" class="w-full py-2.5 bg-gradient-to-r from-warmAmber to-lovePink text-nightBg font-mono text-xs rounded-xl hover:shadow-glow-pink transition font-bold">
+                            Inspect Projects ➔
+                        </button>
+                    </div>
+
+                </div>
+            </article>
+
+        </section>
+
+        <!-- ========================================== -->
+        <!-- CHAPTER 03: SKILLS MATRIX & TOOLKIT         -->
+        <!-- ========================================== -->
+        <section id="skills" class="space-y-12">
+            
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-white/15 pb-4 gap-2">
+                <div>
+                    <span class="font-mono text-xs text-lovePink uppercase tracking-widest">// CHAPTER 03</span>
+                    <h2 class="font-serif text-4xl sm:text-6xl text-white">Skills & Creative Cabinet</h2>
+                </div>
+                <span class="font-hand text-2xl text-warmAmber">"Tools transformed into living systems"</span>
+            </div>
+
+            <!-- Skills Grid Matrix with 3D Tilt Hover Effects -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Category 1: Web & Code -->
+                <div class="glass-card p-6 rounded-3xl shadow-glass space-y-4 flex flex-col justify-between hover:border-lovePink/50 transition duration-300">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                            <span class="font-mono text-xs font-bold text-white">CORE ENGINEERING</span>
+                            <i class="fa-solid fa-code text-lovePink"></i>
+                        </div>
+                        <div class="space-y-2.5 font-mono text-xs">
+                            <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex justify-between items-center">
+                                <span>JavaScript (ES6+)</span>
+                                <span class="text-lovePink font-bold">Advanced</span>
+                            </div>
+                            <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex justify-between items-center">
+                                <span>HTML5 / Tailwind</span>
+                                <span class="text-lovePink font-bold">Expert</span>
+                            </div>
+                            <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex justify-between items-center">
+                                <span>Python Logic</span>
+                                <span class="text-white/60">Intermediate</span>
+                            </div>
+                            <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex justify-between items-center">
+                                <span>REST & JSON APIs</span>
+                                <span class="text-lovePink font-bold">Proficient</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="font-hand text-lg text-medellinCyan pt-4 border-t border-white/10">
+                        ↳ Clean, self-taught syntax
+                    </div>
+                </div>
+
+                <!-- Category 2: Hardware & Microcontrollers -->
+                <div class="glass-card p-6 rounded-3xl shadow-glass space-y-4 flex flex-col justify-between hover:border-medellinCyan/50 transition duration-300">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                            <span class="font-mono text-xs font-bold text-white">HARDWARE & IOT</span>
+                            <i class="fa-solid fa-microchip text-medellinCyan"></i>
+                        </div>
+                        <div class="space-y-2.5 font-mono text-xs">
+                            <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex justify-between items-center">
+                                <span>ESP32 Microcontrollers</span>
+                                <span class="text-medellinCyan font-bold">Active</span>
+                            </div>
+                            <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex justify-between items-center">
+                                <span>C++ / Embedded Wiring</span>
+                                <span class="text-white/60">Intermediate</span>
+                            </div>
+                            <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex justify-between items-center">
+                                <span>Environmental Sensors</span>
+                                <span class="text-medellinCyan font-bold">Tested</span>
+                            </div>
+                            <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex justify-between items-center">
+                                <span>Serial Data Streams</span>
+                                <span class="text-white/60">Proficient</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="font-hand text-lg text-medellinCyan pt-4 border-t border-white/10">
+                        ↳ Medellín physical tinkering
+                    </div>
+                </div>
+
+                <!-- Category 3: Creative Canvas & Audio -->
+                <div class="glass-card p-6 rounded-3xl shadow-glass space-y-4 flex flex-col justify-between hover:border-warmAmber/50 transition duration-300">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                            <span class="font-mono text-xs font-bold text-white">CREATIVE & AUDIO</span>
+                            <i class="fa-solid fa-wand-magic-sparkles text-warmAmber"></i>
+                        </div>
+                        <div class="space-y-2.5 font-mono text-xs">
+                            <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex justify-between items-center">
+                                <span>Unruled UI / UX</span>
+                                <span class="text-warmAmber font-bold">Native</span>
+                            </div>
+                            <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex justify-between items-center">
+                                <span>Web Audio Synthesis</span>
+                                <span class="text-warmAmber font-bold">Proficient</span>
+                            </div>
+                            <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex justify-between items-center">
+                                <span>HTML5 Canvas Art</span>
+                                <span class="text-warmAmber font-bold">Advanced</span>
+                            </div>
+                            <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex justify-between items-center">
+                                <span>Figma Prototyping</span>
+                                <span class="text-white/60">Capable</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="font-hand text-lg text-medellinCyan pt-4 border-t border-white/10">
+                        ↳ Anti-template aesthetics
+                    </div>
+                </div>
+
+                <!-- Category 4: Mindset -->
+                <div class="glass-card p-6 rounded-3xl shadow-glass space-y-4 flex flex-col justify-between hover:border-lovePurple/50 transition duration-300">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                            <span class="font-mono text-xs font-bold text-white">REBEL MINDSET</span>
+                            <i class="fa-solid fa-lightbulb text-lovePurple"></i>
+                        </div>
+                        <div class="space-y-2.5 font-mono text-xs">
+                            <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex justify-between items-center">
+                                <span>Rapid Prototyping</span>
+                                <span class="text-lovePurple font-bold">Obsessive</span>
+                            </div>
+                            <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex justify-between items-center">
+                                <span>Novelty Adaptability</span>
+                                <span class="text-lovePurple font-bold">High Speed</span>
+                            </div>
+                            <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex justify-between items-center">
+                                <span>Self-Directed Learning</span>
+                                <span class="text-lovePurple font-bold">100% Driven</span>
+                            </div>
+                            <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex justify-between items-center">
+                                <span>Senior Class '26</span>
+                                <span class="text-white">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="font-hand text-lg text-medellinCyan pt-4 border-t border-white/10">
+                        ↳ Rules are clay to reshape
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- CHAPTER 04: CONTACT TRANSMISSION STATION    -->
+        <!-- ========================================== -->
+        <section id="contact" class="glass-card p-6 sm:p-12 rounded-3xl shadow-glow-purple relative overflow-hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
+                
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="font-mono text-xs text-medellinCyan uppercase tracking-widest">// CHAPTER 04 / TRANSMISSION</span>
+                    <h2 class="font-serif text-4xl sm:text-6xl text-white leading-tight">
+                        Transmit a Digital Message.
+                    </h2>
+                    <p class="font-mono text-xs sm:text-sm text-white/70 leading-relaxed">
+                        Whether you are a developer, mentor, recruiter, student, or fellow novelty seeker—reach out to collaborate, share projects, or exchange creative ideas.
+                    </p>
+
+                    <!-- Copy Direct Email Box -->
+                    <div class="p-4 bg-white/5 border border-white/10 rounded-2xl space-y-2">
+                        <span class="font-mono text-[10px] text-white/50 block">DIRECT TRANSMISSION EMAIL</span>
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="font-mono text-xs text-white font-bold truncate" id="contact-email">sebastian.alvarado@example.com</span>
+                            <button onclick="copyContactEmail()" class="px-3 py-1.5 bg-lovePink hover:bg-lovePurple text-white font-mono text-[10px] rounded-xl transition whitespace-nowrap font-bold">
+                                Copy Address 📋
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="font-hand text-2xl text-medellinCyan">
+                        📍 Based in Medellín, Colombia <br>
+                        &nbsp;&nbsp;&nbsp;Available for local & global projects!
+                    </div>
+                </div>
+
+                <!-- Interactive Postcard Form -->
+                <form onsubmit="handlePostcardSend(event)" class="lg:col-span-7 bg-nightBg/80 border border-white/10 p-6 sm:p-8 rounded-2xl space-y-5 shadow-glass">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                        <div>
+                            <span class="font-serif text-2xl text-white">Postcard to Medellín</span>
+                            <span class="block font-mono text-[10px] text-white/50">SELECT DIGITAL STAMP</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button type="button" onclick="selectPostcardStamp(this, 'Medellín 2026')" class="stamp-btn px-3 py-1.5 font-mono text-[10px] rounded-xl bg-lovePink/20 text-lovePink border border-lovePink/40 transition">
+                                🇨🇴 Medellín '26
+                            </button>
+                            <button type="button" onclick="selectPostcardStamp(this, 'Code Kinetic')" class="stamp-btn px-3 py-1.5 font-mono text-[10px] rounded-xl bg-medellinCyan/20 text-medellinCyan border border-medellinCyan/40 transition">
+                                ⚡ Kinetic Code
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-mono text-[10px] text-white/50 mb-1">YOUR NAME / ALIAS</label>
+                        <input type="text" required placeholder="Name or alias..." class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl font-mono text-xs text-white focus:outline-none focus:border-lovePink transition">
+                    </div>
+
+                    <div>
+                        <label class="block font-mono text-[10px] text-white/50 mb-1">YOUR EMAIL</label>
+                        <input type="email" required placeholder="your.email@domain.com" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl font-mono text-xs text-white focus:outline-none focus:border-lovePink transition">
+                    </div>
+
+                    <div>
+                        <label class="block font-mono text-[10px] text-white/50 mb-1">TRANSMISSION MESSAGE</label>
+                        <textarea required rows="3" placeholder="Write your message or project concept here..." class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl font-mono text-xs text-white focus:outline-none focus:border-lovePink transition"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-lovePink via-lovePurple to-medellinCyan text-white font-mono text-xs font-bold rounded-xl shadow-glow-pink hover:opacity-90 transition flex items-center justify-center gap-2">
+                        <span>TRANSMIT POSTCARD TO SEBASTIÁN</span>
+                        <i class="fa-solid fa-paper-plane text-xs"></i>
+                    </button>
+                </form>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 py-12 text-center font-mono text-xs text-white/50 space-y-2">
+        <p class="font-bold text-white">SEBASTIÁN ALVARADO • MEDELLÍN, COLOMBIA • CLASS OF 2026</p>
+        <p class="font-hand text-xl text-medellinCyan">"Unruled ideas, clean software, and endless curiosity."</p>
+    </footer>
+
+    <!-- Universal Modal Inspector -->
+    <div id="modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-lg w-full rounded-3xl p-6 sm:p-8 shadow-glow-purple relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-white/70 hover:text-white font-mono text-lg">✕</button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <!-- JavaScript Physics & Interactivity Engine -->
+    <script>
+        // Particle & Heart Trail Canvas Engine
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(x, y, isHeart = false) {
+                this.x = x;
+                this.y = y;
+                this.size = isHeart ? Math.random() * 12 + 8 : Math.random() * 4 + 1;
+                this.speedX = (Math.random() - 0.5) * 2;
+                this.speedY = (Math.random() - 0.5) * 2 - 1;
+                this.life = 1.0;
+                this.decay = Math.random() * 0.02 + 0.015;
+                this.isHeart = isHeart;
+                this.color = isHeart ? '#ff2a75' : (Math.random() > 0.5 ? '#00f5d4' : '#9d4edd');
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.life -= this.decay;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = Math.max(this.life, 0);
+                ctx.fillStyle = this.color;
+
+                if (this.isHeart) {
+                    // Draw Heart Particle
+                    ctx.beginPath();
+                    const topCurveHeight = this.size * 0.3;
+                    ctx.moveTo(this.x, this.y + topCurveHeight);
+                    ctx.bezierCurveTo(this.x, this.y, this.x - this.size / 2, this.y, this.x - this.size / 2, this.y + topCurveHeight);
+                    ctx.bezierCurveTo(this.x - this.size / 2, this.y + (this.size + topCurveHeight) / 2, this.x, this.y + this.size, this.x, this.y + this.size);
+                    ctx.bezierCurveTo(this.x, this.y + this.size, this.x + this.size / 2, this.y + (this.size + topCurveHeight) / 2, this.x + this.size / 2, this.y + topCurveHeight);
+                    ctx.bezierCurveTo(this.x + this.size / 2, this.y, this.x, this.y, this.x, this.y + topCurveHeight);
+                    ctx.closePath();
+                    ctx.fill();
+                } else {
+                    // Glowing Dot Particle
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                ctx.restore();
+            }
+        }
+
+        function handlePointerMove(e) {
+            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+            if (clientX && clientY && Math.random() > 0.4) {
+                particles.push(new Particle(clientX, clientY, Math.random() > 0.85));
+            }
+        }
+
+        window.addEventListener('mousemove', handlePointerMove);
+        window.addEventListener('touchmove', handlePointerMove);
+
+        function triggerKineticExplosion(e) {
+            const rect = e.target.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+
+            for (let i = 0; i < 30; i++) {
+                particles.push(new Particle(x, y, Math.random() > 0.4));
+            }
+            playHarmonicTone(600);
+        }
+
+        function burstNoveltyParticles(e) {
+            const x = e.clientX || window.innerWidth / 2;
+            const y = e.clientY || window.innerHeight / 2;
+
+            for (let i = 0; i < 45; i++) {
+                particles.push(new Particle(x, y, true));
+            }
+            playHarmonicTone(750);
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].life <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // 3D Tilt Effect on Cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = ((y - centerY) / centerY) * -6;
+                const rotateY = ((x - centerX) / centerX) * 6;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)`;
+            });
+        });
+
+        // Web Audio Synthesizer Engine
+        let audioCtx = null;
+        let synthActive = false;
+
+        function toggleAudioSynth() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            synthActive = !synthActive;
+            const status = document.getElementById('synth-status');
+            const icon = document.getElementById('synth-icon');
+
+            if (synthActive) {
+                audioCtx.resume();
+                status.textContent = 'ON';
+                status.className = 'text-medellinCyan font-bold';
+                icon.className = 'fa-solid fa-compact-disc text-lovePink animate-spin';
+                playHarmonicTone(523.25);
+            } else {
+                status.textContent = 'OFF';
+                status.className = 'text-white/70';
+                icon.className = 'fa-solid fa-compact-disc text-lovePink';
+            }
+        }
+
+        function playHarmonicTone(freq) {
+            if (!synthActive || !audioCtx) return;
+
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+                gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        // Novelty Radar Wheel Engine
+        const obsessionsList = [
+            '"Unfamiliar Programming Paradigms"',
+            '"Web Audio & Synthesizer Logic"',
+            '"ESP32 Microcontroller Sensors"',
+            '"Medellín City Transit Telemetry"',
+            '"Unruled Kinetic Digital UI"',
+            '"Relational DB Query Optimization"'
+        ];
+        let obsIndex = 0;
+
+        function spinNoveltyRadar() {
+            obsIndex = (obsIndex + 1) % obsessionsList.length;
+            const textEl = document.getElementById('radar-text');
+            textEl.style.opacity = '0';
+            playHarmonicTone(500 + obsIndex * 50);
+
+            setTimeout(() => {
+                textEl.textContent = obsessionsList[obsIndex];
+                textEl.style.opacity = '1';
+            }, 180);
+        }
+
+        // TDeA Simulation Logic
+        function runTDeASimulation() {
+            const out = document.getElementById('tdea-output');
+            out.classList.remove('hidden');
+            playHarmonicTone(680);
+        }
+
+        // Quipux Traffic Controller Simulator
+        let quipuxPhase = 0;
+        function cycleQuipuxTraffic() {
+            quipuxPhase = (quipuxPhase + 1) % 3;
+            const red = document.getElementById('q-light-red');
+            const yellow = document.getElementById('q-light-yellow');
+            const green = document.getElementById('q-light-green');
+            const status = document.getElementById('quipux-status-text');
+
+            red.className = "w-9 h-9 rounded-full bg-red-950 border border-white/20 transition-all duration-300";
+            yellow.className = "w-9 h-9 rounded-full bg-amber-950 border border-white/20 transition-all duration-300";
+            green.className = "w-9 h-9 rounded-full bg-emerald-950 border border-white/20 transition-all duration-300";
+
+            if (quipuxPhase === 0) {
+                green.className = "w-9 h-9 rounded-full bg-emerald-500 border border-white/20 shadow-[0_0_20px_#10b981] transition-all duration-300";
+                status.textContent = "STATUS: FLOW OPTIMAL";
+                status.className = "text-emerald-400 font-bold";
+                playHarmonicTone(650);
+            } else if (quipuxPhase === 1) {
+                yellow.className = "w-9 h-9 rounded-full bg-amber-400 border border-white/20 shadow-[0_0_20px_#f59e0b] transition-all duration-300";
+                status.textContent = "STATUS: PHASE TRANSITION";
+                status.className = "text-amber-400 font-bold";
+                playHarmonicTone(500);
+            } else {
+                red.className = "w-9 h-9 rounded-full bg-red-600 border border-white/20 shadow-[0_0_20px_#ef4444] transition-all duration-300";
+                status.textContent = "STATUS: PRIORITY STOP";
+                status.className = "text-red-400 font-bold";
+                playHarmonicTone(350);
+            }
+        }
+
+        // Modal Content Data
+        const modalData = {
+            tdea: {
+                title: "TDeA Software & Logic Engineering",
+                subtitle: "TECNOLÓGICO DE ANTIOQUIA",
+                desc: "Workshops and software coursework at Tecnológico de Antioquia. Focused on logic structures, algorithm design, system efficiency, and building clean web software applications during high school."
+            },
+            quipux: {
+                title: "Quipux Smart City Systems",
+                subtitle: "ENTERPRISE MOBILITY ARCHITECTURE",
+                desc: "Technical learning classes with Quipux. Exploring software design patterns, backend logic, smart traffic light telemetry, database queries, and city-scale transit architecture."
+            },
+            secretaria: {
+                title: "Secretaría de Educación Youth Projects",
+                subtitle: "MUNICIPAL STEM SHOWCASE",
+                desc: "Participating in youth technology challenges and STEM showcases organized by the Secretaría de Educación de Medellín, promoting student-led innovation and local technology projects."
+            }
+        };
+
+        function openModal(key) {
+            const data = modalData[key];
+            if (!data) return;
+
+            const content = document.getElementById('modal-content');
+            content.innerHTML = `
+                <span class="font-mono text-[10px] text-medellinCyan tracking-widest">${data.subtitle}</span>
+                <h3 class="font-serif text-3xl text-white my-2">${data.title}</h3>
+                <p class="font-mono text-xs text-white/70 leading-relaxed mb-6">${data.desc}</p>
+                <div class="flex justify-between items-center border-t border-white/10 pt-4">
+                    <span class="font-hand text-lg text-warmAmber">Medellín • Class of '26</span>
+                    <button onclick="closeModal()" class="px-4 py-2 bg-gradient-to-r from-lovePink to-lovePurple text-white font-mono text-xs rounded-xl font-bold">Close Inspector</button>
+                </div>
+            `;
+            document.getElementById('modal').classList.remove('hidden');
+            playHarmonicTone(550);
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+        }
+
+        // Contact email copy
+        function copyContactEmail() {
+            const email = document.getElementById('contact-email').textContent;
+            document.execCommand('copy');
+            playHarmonicTone(700);
+            const btn = event.target;
+            const original = btn.textContent;
+            btn.textContent = "COPIED! 📋";
+            setTimeout(() => btn.textContent = original, 2000);
+        }
+
+        // Postcard Stamp Selection
+        function selectPostcardStamp(btn, name) {
+            document.querySelectorAll('.stamp-btn').forEach(b => b.classList.remove('ring-2', 'ring-lovePink'));
+            btn.classList.add('ring-2', 'ring-lovePink');
+            playHarmonicTone(600);
+        }
+
+        // Handle Postcard Send
+        function handlePostcardSend(e) {
+            e.preventDefault();
+            playHarmonicTone(800);
+            burstNoveltyParticles(e);
+            alert("Postcard transmitted to Sebastián! Thank you for sharing your message.");
+            e.target.reset();
+        }
+    </script>
+</body>
+</html>

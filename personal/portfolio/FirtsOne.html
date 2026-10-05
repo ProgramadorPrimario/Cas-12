@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEBASTIÁN ALVARADO — Contemporary Artifacts & CV</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Syne:wght@400;700;800&family=VT323&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        syne: ['Syne', 'sans-serif'],
+                        space: ['Space Grotesk', 'sans-serif'],
+                        mono: ['VT323', 'monospace'],
+                    },
+                    colors: {
+                        artLime: '#ccff00',
+                        artPink: '#ff007f',
+                        artCyan: '#00f0ff',
+                        artDark: '#0e0e12',
+                        artCanvas: '#f4f1ea',
+                        artPurple: '#9d4edd',
+                    },
+                    boxShadow: {
+                        'brutal': '6px 6px 0px 0px #0e0e12',
+                        'brutal-lg': '10px 10px 0px 0px #0e0e12',
+                        'brutal-pink': '8px 8px 0px 0px #ff007f',
+                        'brutal-lime': '8px 8px 0px 0px #ccff00',
+                    },
+                    animation: {
+                        'spin-slow': 'spin 18s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'marquee': 'marquee 25s linear infinite',
+                        'glitch': 'glitch 1s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-15px) rotate(2deg)' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom scrollbar & canvas aesthetics */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0e0e12;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ccff00;
+            border: 2px solid #0e0e12;
+        }
+
+        body {
+            background-color: #0e0e12;
+            color: #f4f1ea;
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        .cursor-dot {
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            width: 12px;
+            height: 12px;
+            background-color: #ccff00;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-trail {
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9998;
+            width: 36px;
+            height: 36px;
+            border: 2px solid #ff007f;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: transform 0.15s ease-out;
+        }
+
+        .art-card {
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .art-card:hover {
+            transform: translateY(-8px) rotate(-1deg) scale(1.02);
+        }
+
+        .brutal-border {
+            border: 3px solid #0e0e12;
+        }
+
+        .brutal-border-light {
+            border: 3px solid #f4f1ea;
+        }
+
+        /* Glitch text effect */
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+        }
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            clip: rect(0, 0, 0, 0);
+        }
+        .glitch-text:hover::before {
+            left: 2px;
+            text-shadow: -2px 0 #ff007f;
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim 2s infinite linear alternate-reverse;
+        }
+        .glitch-text:hover::after {
+            left: -2px;
+            text-shadow: -2px 0 #00f0ff;
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim2 2s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 30px, 0); }
+            50% { clip: rect(40px, 9999px, 70px, 0); }
+            100% { clip: rect(20px, 9999px, 80px, 0); }
+        }
+        @keyframes glitch-anim2 {
+            0% { clip: rect(60px, 9999px, 90px, 0); }
+            50% { clip: rect(10px, 9999px, 40px, 0); }
+            100% { clip: rect(30px, 9999px, 60px, 0); }
+        }
+
+        .sticker-badge {
+            display: inline-block;
+            transform: rotate(var(--rotation, -3deg));
+            transition: transform 0.2s ease;
+        }
+        .sticker-badge:hover {
+            transform: rotate(0deg) scale(1.1);
+        }
+    </style>
+</head>
+<body class="font-space antialiased selection:bg-artLime selection:text-artDark">
+
+    <div id="cursor-dot" class="cursor-dot"></div>
+    <div id="cursor-trail" class="cursor-trail"></div>
+
+    <!-- Generative Background Canvas -->
+    <canvas id="bg-canvas" class="fixed top-0 left-0 w-full h-full -z-10 opacity-40 pointer-events-none"></canvas>
+
+    <header class="fixed top-4 left-0 right-0 z-50 px-4 md:px-8">
+        <div class="max-w-7xl mx-auto bg-artCanvas text-artDark brutal-border p-3 rounded-2xl shadow-brutal flex flex-wrap justify-between items-center gap-4">
+            
+            <!-- Logo / Status -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-artLime rounded-xl brutal-border flex items-center justify-center font-syne font-extrabold text-xl animate-bounce">
+                    SA
+                </div>
+                <div>
+                    <h1 class="font-syne font-bold text-lg leading-tight tracking-tight">SEBASTIÁN ALVARADO</h1>
+                    <p class="font-mono text-xs text-neutral-600 flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-ping"></span>
+                        15 Y/O • MEDELLÍN, COLOMBIA 🇨🇴
+                    </p>
+                </div>
+            </div>
+
+            <!-- View Modes & Action Toggles -->
+            <div class="flex items-center flex-wrap gap-2">
+                <button onclick="setViewMode('collage')" id="btn-collage" class="px-3 py-1.5 text-xs md:text-sm font-bold uppercase rounded-lg border-2 border-artDark bg-artLime shadow-sm transition hover:scale-105 flex items-center gap-1.5">
+                    <i class="fa-solid fa-shapes"></i> <span class="hidden sm:inline">Chaos</span> Collage
+                </button>
+                <button onclick="setViewMode('grid')" id="btn-grid" class="px-3 py-1.5 text-xs md:text-sm font-bold uppercase rounded-lg border-2 border-artDark bg-white shadow-sm transition hover:scale-105 flex items-center gap-1.5">
+                    <i class="fa-solid fa-border-all"></i> <span class="hidden sm:inline">Curator</span> Grid
+                </button>
+                <button onclick="setViewMode('lab')" id="btn-lab" class="px-3 py-1.5 text-xs md:text-sm font-bold uppercase rounded-lg border-2 border-artDark bg-artCyan shadow-sm transition hover:scale-105 flex items-center gap-1.5">
+                    <i class="fa-solid fa-flask"></i> Art Lab
+                </button>
+
+                <div class="h-6 w-px bg-artDark/20 mx-1"></div>
+
+                <!-- Audio Synth Toggle -->
+                <button id="sound-btn" onclick="toggleAudio()" class="w-9 h-9 rounded-lg border-2 border-artDark bg-artPink text-white flex items-center justify-center hover:scale-110 transition shadow-sm" title="Toggle Contemporary Ambient Synth">
+                    <i id="sound-icon" class="fa-solid fa-volume-xmark"></i>
+                </button>
+
+                <!-- Audio Visualizer Dot -->
+                <div id="audio-indicator" class="hidden text-xs font-mono bg-artDark text-artLime px-2 py-1 rounded border border-artDark animate-pulse">
+                    SYNTH ACTIVE
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Marquee Banner Header -->
+    <div class="pt-28 pb-4 bg-artDark border-b-2 border-artCanvas/20 overflow-hidden">
+        <div class="whitespace-nowrap flex animate-marquee text-artLime font-mono text-sm tracking-widest font-bold">
+            <span class="mx-4">⚡ SENIOR YEAR HIGH SCHOOL STUDENT</span> • 
+            <span class="mx-4">🎨 CONTEMPORARY DIGITAL CREATIVE</span> • 
+            <span class="mx-4">🚀 OBSESSED WITH ANYTHING NEW ENTERING MY LIFE</span> • 
+            <span class="mx-4">📍 MEDELLÍN CITY, COLOMBIA</span> • 
+            <span class="mx-4">⚡ SENIOR YEAR HIGH SCHOOL STUDENT</span> • 
+            <span class="mx-4">🎨 CONTEMPORARY DIGITAL CREATIVE</span> • 
+            <span class="mx-4">🚀 OBSESSED WITH ANYTHING NEW ENTERING MY LIFE</span> • 
+            <span class="mx-4">📍 MEDELLÍN CITY, COLOMBIA</span> • 
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 md:px-8 py-8">
+
+        <!-- HERO SECTION -->
+        <section class="relative my-8 p-6 md:p-12 rounded-3xl bg-artCanvas text-artDark brutal-border shadow-brutal-lg overflow-hidden">
+            <!-- Background Decorative Shapes -->
+            <div class="absolute -right-10 -bottom-10 w-60 h-60 bg-artLime rounded-full brutal-border opacity-70 pointer-events-none animate-float"></div>
+            <div class="absolute right-1/3 -top-12 w-40 h-40 bg-artPink rounded-full brutal-border opacity-50 pointer-events-none"></div>
+            
+            <div class="relative z-10 max-w-4xl">
+                <!-- Avant-Garde Subtitle -->
+                <div class="flex flex-wrap items-center gap-2 mb-4">
+                    <span class="sticker-badge bg-artPink text-white text-xs md:text-sm font-bold font-mono px-3 py-1 rounded-full brutal-border" style="--rotation: -2deg;">
+                        MANIFESTO V1.5
+                    </span>
+                    <span class="sticker-badge bg-artCyan text-artDark text-xs md:text-sm font-bold font-mono px-3 py-1 rounded-full brutal-border" style="--rotation: 3deg;">
+                        15 YEARS OLD
+                    </span>
+                    <span class="sticker-badge bg-artLime text-artDark text-xs md:text-sm font-bold font-mono px-3 py-1 rounded-full brutal-border" style="--rotation: -4deg;">
+                        CLASS OF 2026 / SENIOR YEAR
+                    </span>
+                </div>
+
+                <!-- Giant Kinetic Name -->
+                <h1 class="font-syne font-extrabold text-5xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tighter leading-none mb-6 glitch-text uppercase" data-text="SEBASTIÁN">
+                    SEBASTIÁN<br/>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-artPink via-artPurple to-artDark">
+                        ALVARADO
+                    </span>
+                </h1>
+
+                <!-- Core Artistic Philosophy -->
+                <div class="p-6 bg-white/90 backdrop-blur-sm rounded-2xl brutal-border shadow-brutal max-w-2xl mb-8">
+                    <p class="font-space text-lg md:text-xl font-medium leading-relaxed">
+                        "I am driven by <span class="bg-artLime px-1.5 py-0.5 rounded font-bold border border-artDark">every new thing</span> that enters my life. Currently navigating my last year of school in Medellín while creating experiments, code artifacts, and modern digital experiences."
+                    </p>
+                </div>
+
+                <!-- Interactive Quick Actions -->
+                <div class="flex flex-wrap items-center gap-4">
+                    <a href="#projects" class="px-6 py-3 bg-artDark text-artLime font-syne font-bold text-base rounded-xl brutal-border shadow-brutal hover:bg-artPink hover:text-white transition duration-200 transform hover:-translate-y-1">
+                        Explore My Projects <i class="fa-solid fa-arrow-down-long ml-2"></i>
+                    </a>
+                    <button onclick="triggerSurpriseArt()" class="px-6 py-3 bg-artLime text-artDark font-syne font-bold text-base rounded-xl brutal-border shadow-brutal hover:bg-artCyan transition duration-200 transform hover:-translate-y-1">
+                        <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Mutate Page Colors
+                    </button>
+                    <a href="#contact" class="px-6 py-3 bg-white text-artDark font-syne font-bold text-base rounded-xl brutal-border shadow-brutal hover:bg-artPurple hover:text-white transition duration-200 transform hover:-translate-y-1">
+                        Send Message ✉️
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW MODE CONTAINER 1: COLLAGE MODE (Default Contemporary Chaos) -->
+        <div id="view-collage" class="space-y-12 transition-all duration-300">
+            
+            <!-- Section Header -->
+            <div class="flex items-center justify-between border-b-2 border-artCanvas/30 pb-4">
+                <h2 class="font-syne text-3xl md:text-5xl font-extrabold text-artLime flex items-center gap-3">
+                    <span class="text-artPink">01.</span> THE NOVELTY LAB
+                </h2>
+                <span class="font-mono text-xs md:text-sm bg-artCanvas text-artDark px-3 py-1 rounded-full font-bold brutal-border">
+                    INTERACTIVE CANVAS
+                </span>
+            </div>
+
+            <!-- Draggable / Dynamic Interactive Collage Canvas -->
+            <div class="relative min-h-[500px] bg-neutral-900/80 rounded-3xl p-6 border-2 border-artCanvas/20 shadow-inner overflow-hidden" id="collage-canvas">
+                <div class="text-xs font-mono text-neutral-500 mb-4 flex items-center justify-between">
+                    <span><i class="fa-solid fa-hand-pointer text-artLime mr-1"></i> TIP: Hover, drag, or tap cards to inspect artifacts</span>
+                    <button onclick="resetCollagePositions()" class="hover:text-artLime underline">Reset Arrangement</button>
+                </div>
+
+                <!-- Floating Canvas Items -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+
+                    <!-- Artifact 1: Senior High School Status Card -->
+                    <div class="art-card bg-artCanvas text-artDark p-6 rounded-2xl brutal-border shadow-brutal cursor-grab active:cursor-grabbing" style="transform: rotate(-1.5deg)">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-artPink text-white font-mono text-xs px-2 py-1 rounded border border-artDark font-bold">
+                                ACADEMICS & LIFE
+                            </span>
+                            <span class="text-2xl">🎒</span>
+                        </div>
+                        <h3 class="font-syne font-extrabold text-2xl mb-2">Last Year of School</h3>
+                        <p class="text-sm font-space text-neutral-700 mb-4">
+                            Finishing 11th grade in Medellín. Balancing school responsibilities with creative coding, contemporary art experiments, and self-directed learning.
+                        </p>
+                        <div class="w-full bg-neutral-200 h-3 rounded-full overflow-hidden border border-artDark">
+                            <div class="bg-artLime h-full border-r border-artDark" style="width: 88%;"></div>
+                        </div>
+                        <div class="mt-2 flex justify-between text-xs font-mono font-bold">
+                            <span>GRADUATION COUNTDOWN</span>
+                            <span>88% COMPLETE</span>
+                        </div>
+                    </div>
+
+                    <!-- Artifact 2: Medellin Origin Card -->
+                    <div class="art-card bg-artLime text-artDark p-6 rounded-2xl brutal-border shadow-brutal-pink cursor-grab active:cursor-grabbing" style="transform: rotate(2deg)">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-artDark text-artLime font-mono text-xs px-2 py-1 rounded border border-artDark font-bold">
+                                LOCATION RADAR
+                            </span>
+                            <span class="text-2xl">🏔️</span>
+                        </div>
+                        <h3 class="font-syne font-extrabold text-2xl mb-2">Medellín City</h3>
+                        <p class="text-sm font-space text-neutral-900 mb-4">
+                            Surrounded by the Aburrá Valley mountains, urban street art, eternal spring weather, and vibrant digital innovation.
+                        </p>
+                        <div class="bg-artDark/10 p-3 rounded-xl border border-artDark text-xs font-mono space-y-1">
+                            <div><strong>LAT:</strong> 6.2442° N</div>
+                            <div><strong>LON:</strong> 75.5812° W</div>
+                            <div><strong>VIBE:</strong> High energy, warm, futuristic</div>
+                        </div>
+                    </div>
+
+                    <!-- Artifact 3: The Novelty Mindset -->
+                    <div class="art-card bg-artCyan text-artDark p-6 rounded-2xl brutal-border shadow-brutal cursor-grab active:cursor-grabbing" style="transform: rotate(-2deg)">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-artPurple text-white font-mono text-xs px-2 py-1 rounded border border-artDark font-bold">
+                                CORE DRIVE
+                            </span>
+                            <span class="text-2xl">⚡</span>
+                        </div>
+                        <h3 class="font-syne font-extrabold text-2xl mb-2">Obsession with Newness</h3>
+                        <p class="text-sm font-space text-neutral-900 mb-4">
+                            "If I haven't seen, built, or experienced it before, I want to try it today."
+                        </p>
+                        <div class="bg-white p-3 rounded-xl border border-artDark">
+                            <p class="text-xs font-mono text-neutral-800">
+                                <i class="fa-solid fa-quote-left text-artPink mr-1"></i>
+                                Continuous exploration keeps creativity alive. Every tool is a toy until mastered.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Interactive Floating Sticker Wall -->
+                <div class="mt-8 pt-6 border-t border-neutral-700 flex flex-wrap justify-center items-center gap-3">
+                    <span class="text-xs font-mono text-neutral-400">STICKER WALL:</span>
+                    <button onclick="addNoveltySticker('✨ Generative AI')" class="sticker-badge bg-artPurple text-white text-xs font-bold font-mono px-3 py-1.5 rounded-full brutal-border hover:scale-110">
+                        + Generative AI
+                    </button>
+                    <button onclick="addNoveltySticker('🎵 Sound Design')" class="sticker-badge bg-artPink text-white text-xs font-bold font-mono px-3 py-1.5 rounded-full brutal-border hover:scale-110">
+                        + Sound Synthesizers
+                    </button>
+                    <button onclick="addNoveltySticker('🌐 WebGL 3D')" class="sticker-badge bg-artLime text-artDark text-xs font-bold font-mono px-3 py-1.5 rounded-full brutal-border hover:scale-110">
+                        + Interactive 3D
+                    </button>
+                    <button onclick="addNoveltySticker('📐 Minimalist UI')" class="sticker-badge bg-artCyan text-artDark text-xs font-bold font-mono px-3 py-1.5 rounded-full brutal-border hover:scale-110">
+                        + Brutalist UI
+                    </button>
+                </div>
+                <div id="dynamic-stickers-container" class="flex flex-wrap gap-2 mt-4 justify-center"></div>
+            </div>
+        </div>
+
+        <!-- PROJECTS SECTION (Always Visible in both Collage and Grid View) -->
+        <section id="projects" class="my-16 space-y-8">
+            <div class="flex flex-wrap items-end justify-between border-b-2 border-artCanvas/30 pb-4 gap-4">
+                <div>
+                    <span class="text-artPink font-mono text-sm font-bold">PORTFOLIO EXHIBITION</span>
+                    <h2 class="font-syne text-4xl md:text-6xl font-extrabold text-artCanvas">
+                        PROJECT ARTIFACTS
+                    </h2>
+                </div>
+                <div class="flex gap-2 font-mono text-xs">
+                    <button onclick="filterProjects('all')" class="proj-filter active px-3 py-1.5 rounded-lg border-2 border-artCanvas bg-artLime text-artDark font-bold">ALL</button>
+                    <button onclick="filterProjects('tech')" class="proj-filter px-3 py-1.5 rounded-lg border-2 border-artCanvas bg-artDark text-artCanvas font-bold">TECH/CODE</button>
+                    <button onclick="filterProjects('art')" class="proj-filter px-3 py-1.5 rounded-lg border-2 border-artCanvas bg-artDark text-artCanvas font-bold">ART/DESIGN</button>
+                </div>
+            </div>
+
+            <!-- Project Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <!-- Project Card 1 -->
+                <div class="project-item tech art-card bg-artCanvas text-artDark rounded-3xl p-6 brutal-border shadow-brutal flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-artDark text-artLime text-xs font-mono font-bold px-2.5 py-1 rounded-full">
+                                EXPERIMENT 01
+                            </span>
+                            <span class="text-xs font-mono font-bold text-neutral-500">2026</span>
+                        </div>
+                        <div class="h-44 bg-neutral-900 rounded-2xl mb-4 p-4 brutal-border relative overflow-hidden flex items-center justify-center group">
+                            <!-- Abstract canvas illustration -->
+                            <div class="absolute inset-0 bg-gradient-to-br from-artPink/40 via-artPurple/30 to-artCyan/40 group-hover:scale-110 transition duration-500"></div>
+                            <i class="fa-solid fa-brain text-5xl text-artLime z-10 animate-pulse"></i>
+                            <div class="absolute bottom-2 left-2 right-2 text-center text-xs font-mono bg-artDark/80 text-white py-1 rounded">
+                                Generative Canvas Engine
+                            </div>
+                        </div>
+                        <h3 class="font-syne font-extrabold text-2xl mb-2">Aetheria Generative Canvas</h3>
+                        <p class="text-sm text-neutral-700 font-space mb-4">
+                            An interactive procedural artwork generator created during senior school breaks. Users sculpt algorithmic shapes using sound frequencies and mouse movement.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap gap-1.5 mb-4 font-mono text-xs">
+                            <span class="bg-neutral-200 text-neutral-800 px-2 py-0.5 rounded border border-artDark">JavaScript</span>
+                            <span class="bg-neutral-200 text-neutral-800 px-2 py-0.5 rounded border border-artDark">Canvas API</span>
+                            <span class="bg-neutral-200 text-neutral-800 px-2 py-0.5 rounded border border-artDark">Audio Web API</span>
+                        </div>
+                        <button onclick="openProjectModal('aetheria')" class="w-full py-2.5 bg-artLime text-artDark font-syne font-bold text-sm rounded-xl brutal-border shadow-sm hover:bg-artCyan transition">
+                            Inspect Artifact <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Project Card 2 -->
+                <div class="project-item art art-card bg-artPink text-white rounded-3xl p-6 brutal-border shadow-brutal flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-artDark text-artCyan text-xs font-mono font-bold px-2.5 py-1 rounded-full">
+                                EXPERIMENT 02
+                            </span>
+                            <span class="text-xs font-mono font-bold text-white/80">2026</span>
+                        </div>
+                        <div class="h-44 bg-neutral-900 rounded-2xl mb-4 p-4 brutal-border relative overflow-hidden flex items-center justify-center group">
+                            <div class="absolute inset-0 bg-gradient-to-tr from-artLime/30 to-artCyan/40 group-hover:scale-110 transition duration-500"></div>
+                            <i class="fa-solid fa-city text-5xl text-artCyan z-10"></i>
+                            <div class="absolute bottom-2 left-2 right-2 text-center text-xs font-mono bg-artDark/80 text-white py-1 rounded">
+                                Medellín Urban Acoustic Mapping
+                            </div>
+                        </div>
+                        <h3 class="font-syne font-extrabold text-2xl mb-2 text-white">Medellín Echoes</h3>
+                        <p class="text-sm text-pink-100 font-space mb-4">
+                            A field recording and digital sound archive capturing the ambient urban energy, street vendors, and cable car breezes of Medellín.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap gap-1.5 mb-4 font-mono text-xs">
+                            <span class="bg-artDark text-white px-2 py-0.5 rounded border border-white">Field Recording</span>
+                            <span class="bg-artDark text-white px-2 py-0.5 rounded border border-white">UI Design</span>
+                        </div>
+                        <button onclick="openProjectModal('medellin')" class="w-full py-2.5 bg-artDark text-artLime font-syne font-bold text-sm rounded-xl brutal-border shadow-sm hover:bg-white hover:text-artDark transition">
+                            Inspect Artifact <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Project Card 3 -->
+                <div class="project-item tech art-card bg-artCyan text-artDark rounded-3xl p-6 brutal-border shadow-brutal flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-artPurple text-white text-xs font-mono font-bold px-2.5 py-1 rounded-full">
+                                EXPERIMENT 03
+                            </span>
+                            <span class="text-xs font-mono font-bold text-neutral-700">2025-2026</span>
+                        </div>
+                        <div class="h-44 bg-neutral-900 rounded-2xl mb-4 p-4 brutal-border relative overflow-hidden flex items-center justify-center group">
+                            <div class="absolute inset-0 bg-gradient-to-br from-artLime/40 to-artPink/30 group-hover:scale-110 transition duration-500"></div>
+                            <i class="fa-solid fa-seedling text-5xl text-artLime z-10"></i>
+                            <div class="absolute bottom-2 left-2 right-2 text-center text-xs font-mono bg-artDark/80 text-white py-1 rounded">
+                                IoT School Project
+                            </div>
+                        </div>
+                        <h3 class="font-syne font-extrabold text-2xl mb-2">HydroPulse School Flora</h3>
+                        <p class="text-sm text-neutral-800 font-space mb-4">
+                            A smart automated environmental sensor station built for our school science fair using micro-controllers and live dashboard visualizers.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap gap-1.5 mb-4 font-mono text-xs">
+                            <span class="bg-white text-neutral-900 px-2 py-0.5 rounded border border-artDark">Arduino/ESP32</span>
+                            <span class="bg-white text-neutral-900 px-2 py-0.5 rounded border border-artDark">Web Dashboard</span>
+                        </div>
+                        <button onclick="openProjectModal('hydropulse')" class="w-full py-2.5 bg-artDark text-artCyan font-syne font-bold text-sm rounded-xl brutal-border shadow-sm hover:bg-artLime hover:text-artDark transition">
+                            Inspect Artifact <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SKILLS & KNOWLEDGE CLUSTER -->
+        <section class="my-16 bg-artCanvas text-artDark p-8 md:p-12 rounded-3xl brutal-border shadow-brutal-lg">
+            <div class="max-w-3xl mb-8">
+                <span class="bg-artPink text-white font-mono text-xs font-bold px-3 py-1 rounded-full border border-artDark">
+                    NEURAL INVENTORY
+                </span>
+                <h2 class="font-syne text-4xl md:text-5xl font-extrabold mt-2">
+                    WHAT I'M LEARNING & USING
+                </h2>
+                <p class="text-neutral-700 font-space mt-2">
+                    I treat technology as a creative medium. Here is my current stack of tools, concepts, and school subjects I love.
+                </p>
+            </div>
+
+            <!-- Interactive Physics/Skill Badges -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 font-mono text-sm">
+                <div class="p-4 bg-white rounded-xl brutal-border shadow-sm flex items-center gap-3 hover:scale-105 transition">
+                    <i class="fa-brands fa-js text-2xl text-yellow-500"></i>
+                    <div>
+                        <div class="font-bold">JavaScript</div>
+                        <div class="text-xs text-neutral-500">Interactive Web</div>
+                    </div>
+                </div>
+                <div class="p-4 bg-white rounded-xl brutal-border shadow-sm flex items-center gap-3 hover:scale-105 transition">
+                    <i class="fa-brands fa-html5 text-2xl text-orange-500"></i>
+                    <div>
+                        <div class="font-bold">HTML5 & CSS3</div>
+                        <div class="text-xs text-neutral-500">Neo-Brutalism</div>
+                    </div>
+                </div>
+                <div class="p-4 bg-white rounded-xl brutal-border shadow-sm flex items-center gap-3 hover:scale-105 transition">
+                    <i class="fa-brands fa-python text-2xl text-blue-500"></i>
+                    <div>
+                        <div class="font-bold">Python</div>
+                        <div class="text-xs text-neutral-500">Logic & Scripts</div>
+                    </div>
+                </div>
+                <div class="p-4 bg-white rounded-xl brutal-border shadow-sm flex items-center gap-3 hover:scale-105 transition">
+                    <i class="fa-solid fa-palette text-2xl text-artPink"></i>
+                    <div>
+                        <div class="font-bold">Contemporary Art</div>
+                        <div class="text-xs text-neutral-500">Design & Form</div>
+                    </div>
+                </div>
+                <div class="p-4 bg-white rounded-xl brutal-border shadow-sm flex items-center gap-3 hover:scale-105 transition">
+                    <i class="fa-solid fa-cubes text-2xl text-artPurple"></i>
+                    <div>
+                        <div class="font-bold">Canvas 2D / WebGL</div>
+                        <div class="text-xs text-neutral-500">Generative Visuals</div>
+                    </div>
+                </div>
+                <div class="p-4 bg-white rounded-xl brutal-border shadow-sm flex items-center gap-3 hover:scale-105 transition">
+                    <i class="fa-solid fa-[#0e0e12] fa-sliders text-2xl text-emerald-600"></i>
+                    <div>
+                        <div class="font-bold">UI/UX Layouts</div>
+                        <div class="text-xs text-neutral-500">Experimental UX</div>
+                    </div>
+                </div>
+                <div class="p-4 bg-white rounded-xl brutal-border shadow-sm flex items-center gap-3 hover:scale-105 transition">
+                    <i class="fa-solid fa-book-bookmark text-2xl text-artCyan"></i>
+                    <div>
+                        <div class="font-bold">Senior High School</div>
+                        <div class="text-xs text-neutral-500">Physics & Math</div>
+                    </div>
+                </div>
+                <div class="p-4 bg-white rounded-xl brutal-border shadow-sm flex items-center gap-3 hover:scale-105 transition">
+                    <i class="fa-solid fa-wave-square text-2xl text-artDark"></i>
+                    <div>
+                        <div class="font-bold">Sound Design</div>
+                        <div class="text-xs text-neutral-500">Web Audio Synth</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW MODE CONTAINER 2: ART LABORATORY MODE (Interactive Sandbox) -->
+        <div id="view-lab" class="hidden space-y-8 my-12 bg-artDark p-6 md:p-10 rounded-3xl border-2 border-artLime shadow-brutal-lime">
+            <div class="flex justify-between items-center border-b border-artLime/30 pb-4">
+                <div>
+                    <span class="bg-artLime text-artDark font-mono text-xs font-bold px-3 py-1 rounded">EXPERIMENTAL PLAYGROUND</span>
+                    <h2 class="font-syne text-3xl md:text-5xl font-extrabold text-artLime mt-2">CONTEMPORARY SCULPTOR</h2>
+                </div>
+                <button onclick="setViewMode('collage')" class="text-xs font-mono bg-artCanvas text-artDark px-3 py-1.5 rounded font-bold border border-artDark">
+                    Close Lab ✖
+                </button>
+            </div>
+            <p class="font-space text-neutral-300">
+                Click and drag inside the interactive box to draw continuous mathematical ribbon sculptures. Press <strong class="text-artLime">CLEAR</strong> or <strong class="text-artCyan">SYNTH TONE</strong> to test audio frequencies!
+            </p>
+
+            <!-- Mini Sculptor Canvas -->
+            <div class="relative w-full h-80 bg-neutral-950 rounded-2xl brutal-border border-artCanvas overflow-hidden">
+                <canvas id="lab-canvas" class="w-full h-full cursor-crosshair"></canvas>
+                <div class="absolute bottom-4 left-4 flex gap-2">
+                    <button onclick="clearLabCanvas()" class="px-3 py-1 bg-artPink text-white font-mono text-xs font-bold rounded border border-white">
+                        CLEAR CANVAS
+                    </button>
+                    <button onclick="playRandomSynthPitch()" class="px-3 py-1 bg-artCyan text-artDark font-mono text-xs font-bold rounded border border-artDark">
+                        TRIGGER AUDIO FREQ
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTACT & GUESTBOOK TERMINAL -->
+        <section id="contact" class="my-16 bg-artPurple text-white p-8 md:p-12 rounded-3xl brutal-border shadow-brutal-lg relative overflow-hidden">
+            <div class="relative z-10 max-w-4xl">
+                <span class="bg-artLime text-artDark font-mono text-xs font-bold px-3 py-1 rounded-full border border-artDark">
+                    GET IN TOUCH
+                </span>
+                <h2 class="font-syne text-4xl md:text-6xl font-extrabold mt-3 mb-4">
+                    LET'S CREATE SOMETHING NEW
+                </h2>
+                <p class="font-space text-lg text-purple-100 mb-8 max-w-2xl">
+                    Whether you want to talk about modern art, technology, potential projects, or share a cool new tool—drop me a message!
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Contact Info Cards -->
+                    <div class="space-y-4">
+                        <div class="p-4 bg-white text-artDark rounded-2xl brutal-border shadow-brutal flex items-center justify-between">
+                            <div>
+                                <div class="text-xs font-mono font-bold text-neutral-500">DIRECT EMAIL</div>
+                                <div class="font-syne font-extrabold text-lg" id="email-text">sebastian.alvarado@example.com</div>
+                            </div>
+                            <button onclick="copyEmail()" class="px-3 py-2 bg-artLime text-artDark font-mono text-xs font-bold rounded-xl border border-artDark hover:bg-artCyan transition">
+                                Copy 📋
+                            </button>
+                        </div>
+
+                        <div class="p-4 bg-white text-artDark rounded-2xl brutal-border shadow-brutal">
+                            <div class="text-xs font-mono font-bold text-neutral-500 mb-1">LOCATION</div>
+                            <div class="font-syne font-extrabold text-lg">Medellín, Antioquia, Colombia 🇨🇴</div>
+                            <div class="text-xs text-neutral-600 font-mono mt-1">High School Senior / Creative Technologist</div>
+                        </div>
+
+                        <!-- Social Badges -->
+                        <div class="flex gap-3 pt-2">
+                            <a href="#" class="w-12 h-12 bg-artLime text-artDark rounded-xl brutal-border flex items-center justify-center font-bold text-xl hover:scale-110 transition shadow-sm">
+                                <i class="fa-brands fa-github"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-artCyan text-artDark rounded-xl brutal-border flex items-center justify-center font-bold text-xl hover:scale-110 transition shadow-sm">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-artPink text-white rounded-xl brutal-border flex items-center justify-center font-bold text-xl hover:scale-110 transition shadow-sm">
+                                <i class="fa-brands fa-x-twitter"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Direct Message Form -->
+                    <form onsubmit="handleFormSubmit(event)" class="bg-artDark p-6 rounded-2xl brutal-border border-white space-y-4">
+                        <div>
+                            <label class="block font-mono text-xs text-artLime font-bold mb-1">YOUR NAME</label>
+                            <input type="text" required placeholder="Artist / Recruiter / Friend" class="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-700 text-white rounded-xl focus:outline-none focus:border-artLime font-space text-sm">
+                        </div>
+                        <div>
+                            <label class="block font-mono text-xs text-artLime font-bold mb-1">YOUR MESSAGE OR IDEA</label>
+                            <textarea required rows="3" placeholder="Tell me about a new project, tool, or artwork..." class="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-700 text-white rounded-xl focus:outline-none focus:border-artLime font-space text-sm"></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-3 bg-artLime text-artDark font-syne font-bold rounded-xl brutal-border hover:bg-artCyan transition flex items-center justify-center gap-2">
+                            Send Transmission <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-artDark text-neutral-400 border-t-2 border-artCanvas/20 py-12 px-4 md:px-8">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-6 font-mono text-xs">
+            <div>
+                <span class="text-artLime font-bold">SEBASTIÁN ALVARADO</span> — CONTEMPORARY PORTFOLIO CV
+            </div>
+            <div class="flex gap-4">
+                <span>MEDELLÍN, COLOMBIA</span> •
+                <span>15 YEARS OLD</span> •
+                <span>CLASS OF 2026</span>
+            </div>
+            <div class="text-neutral-500">
+                Designed with Neo-Brutalist & Contemporary Art Principles
+            </div>
+        </div>
+    </footer>
+
+    <!-- PROJECT INSPECTOR MODAL -->
+    <div id="modal-backdrop" class="fixed inset-0 bg-artDark/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-artCanvas text-artDark max-w-2xl w-full rounded-3xl brutal-border shadow-brutal-lg p-6 md:p-8 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal()" class="absolute top-4 right-4 w-10 h-10 bg-artDark text-white rounded-full brutal-border flex items-center justify-center hover:bg-artPink font-bold">
+                ✕
+            </button>
+            <div id="modal-content">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Custom Mouse Cursor Effect
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorTrail = document.getElementById('cursor-trail');
+        let mouseX = 0, mouseY = 0;
+        let trailX = 0, trailY = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursorDot.style.left = `${mouseX}px`;
+            cursorDot.style.top = `${mouseY}px`;
+        });
+
+        function animateCursor() {
+            trailX += (mouseX - trailX) * 0.2;
+            trailY += (mouseY - trailY) * 0.2;
+            cursorTrail.style.left = `${trailX}px`;
+            cursorTrail.style.top = `${trailY}px`;
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        const bgCanvas = document.getElementById('bg-canvas');
+        const ctx = bgCanvas.getContext('2d');
+
+        function resizeBgCanvas() {
+            bgCanvas.width = window.innerWidth;
+            bgCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeBgCanvas);
+        resizeBgCanvas();
+
+        let particles = [];
+        for(let i=0; i<35; i++){
+            particles.push({
+                x: Math.random() * bgCanvas.width,
+                y: Math.random() * bgCanvas.height,
+                radius: Math.random() * 40 + 10,
+                vx: (Math.random() - 0.5) * 1.2,
+                vy: (Math.random() - 0.5) * 1.2,
+                color: ['#ccff00', '#ff007f', '#00f0ff', '#9d4edd'][Math.floor(Math.random()*4)]
+            });
+        }
+
+        function drawBgParticles() {
+            ctx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if(p.x < 0 || p.x > bgCanvas.width) p.vx *= -1;
+                if(p.y < 0 || p.y > bgCanvas.height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = 0.25;
+                ctx.fill();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#0e0e12';
+                ctx.stroke();
+            });
+            requestAnimationFrame(drawBgParticles);
+        }
+        drawBgParticles();
+
+        let audioCtx = null;
+        let isAudioPlaying = false;
+        let synthOsc = null;
+
+        function toggleAudio() {
+            if(!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            const soundIcon = document.getElementById('sound-icon');
+            const soundBtn = document.getElementById('sound-btn');
+            const audioIndicator = document.getElementById('audio-indicator');
+
+            if(!isAudioPlaying) {
+                audioCtx.resume();
+                playAmbientTone();
+                isAudioPlaying = true;
+                soundIcon.className = 'fa-solid fa-volume-high';
+                soundBtn.className = 'w-9 h-9 rounded-lg border-2 border-artDark bg-artLime text-artDark flex items-center justify-center hover:scale-110 transition shadow-sm';
+                audioIndicator.classList.remove('hidden');
+            } else {
+                if(synthOsc) synthOsc.stop();
+                isAudioPlaying = false;
+                soundIcon.className = 'fa-solid fa-volume-xmark';
+                soundBtn.className = 'w-9 h-9 rounded-lg border-2 border-artDark bg-artPink text-white flex items-center justify-center hover:scale-110 transition shadow-sm';
+                audioIndicator.classList.add('hidden');
+            }
+        }
+
+        function playAmbientTone() {
+            if(!audioCtx || !isAudioPlaying) return;
+            
+            synthOsc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            // Avant-garde ambient pentatonic pitch selection
+            const pitches = [220, 277.18, 329.63, 440, 554.37];
+            const randomPitch = pitches[Math.floor(Math.random() * pitches.length)];
+
+            synthOsc.type = 'sine';
+            synthOsc.frequency.setValueAtTime(randomPitch, audioCtx.currentTime);
+
+            gain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.05, audioCtx.currentTime + 1);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 4);
+
+            synthOsc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            synthOsc.start();
+            synthOsc.stop(audioCtx.currentTime + 4.5);
+
+            setTimeout(() => {
+                if(isAudioPlaying) playAmbientTone();
+            }, 3500);
+        }
+
+        function playRandomSynthPitch() {
+            if(!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            audioCtx.resume();
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            const freq = 150 + Math.random() * 600;
+            osc.type = ['triangle', 'sawtooth', 'square'][Math.floor(Math.random()*3)];
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.8);
+        }
+
+        function setViewMode(mode) {
+            const collageView = document.getElementById('view-collage');
+            const labView = document.getElementById('view-lab');
+
+            if(mode === 'collage' || mode === 'grid') {
+                collageView.classList.remove('hidden');
+                labView.classList.add('hidden');
+            } else if(mode === 'lab') {
+                collageView.classList.add('hidden');
+                labView.classList.remove('hidden');
+                initLabCanvas();
+            }
+
+            // Play interactive UI blip
+            playRandomSynthPitch();
+        }
+
+        function addNoveltySticker(text) {
+            const container = document.getElementById('dynamic-stickers-container');
+            const bgColors = ['bg-artLime text-artDark', 'bg-artPink text-white', 'bg-artCyan text-artDark', 'bg-artPurple text-white'];
+            const randomColor = bgColors[Math.floor(Math.random() * bgColors.length)];
+            const rotation = (Math.random() * 12 - 6).toFixed(1);
+
+            const sticker = document.createElement('div');
+            sticker.className = `sticker-badge ${randomColor} text-xs font-bold font-mono px-3 py-1.5 rounded-full brutal-border shadow-sm cursor-pointer`;
+            sticker.style.setProperty('--rotation', `${rotation}deg`);
+            sticker.innerText = text;
+            sticker.onclick = () => sticker.remove();
+
+            container.appendChild(sticker);
+            playRandomSynthPitch();
+        }
+
+        function triggerSurpriseArt() {
+            const colors = ['#ccff00', '#ff007f', '#00f0ff', '#9d4edd', '#ffffff', '#222222'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            document.body.style.backgroundColor = randomColor === '#ffffff' ? '#111111' : '#0e0e12';
+            
+            // Mutate card angles randomly
+            document.querySelectorAll('.art-card').forEach(card => {
+                const deg = (Math.random() * 8 - 4).toFixed(1);
+                card.style.transform = `rotate(${deg}deg) scale(1.02)`;
+            });
+
+            playRandomSynthPitch();
+        }
+
+        function filterProjects(category) {
+            const items = document.querySelectorAll('.project-item');
+            items.forEach(item => {
+                if(category === 'all' || item.classList.contains(category)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            document.querySelectorAll('.proj-filter').forEach(btn => {
+                btn.className = 'proj-filter px-3 py-1.5 rounded-lg border-2 border-artCanvas bg-artDark text-artCanvas font-bold';
+            });
+            event.target.className = 'proj-filter active px-3 py-1.5 rounded-lg border-2 border-artCanvas bg-artLime text-artDark font-bold';
+            
+            playRandomSynthPitch();
+        }
+
+        // Project Modal System
+        const modalData = {
+            aetheria: {
+                title: "Aetheria Generative Canvas",
+                subtitle: "Procedural Audio-Visual Sandbox",
+                tag: "Tech & Generative Art",
+                desc: "Aetheria is an ongoing software art project where mathematical vectors and audio frequencies form evolving visual landscapes. Built during quiet weekends in Medellín, it reflects my desire to blend music, high school trigonometry, and code aesthetics.",
+                tech: ["JavaScript", "HTML5 Canvas API", "Web Audio Frequency Analyser"],
+                icon: "fa-brain"
+            },
+            medellin: {
+                title: "Medellín Echoes",
+                subtitle: "Acoustic Urban Archive",
+                tag: "Contemporary Sound Mapping",
+                desc: "Medellín Echoes documents the dynamic atmospheric hum of Medellín—from Metro cables ascending the hills to street performances at Plaza Botero. Designed as an interactive sonic library.",
+                tech: ["Field Audio Synthesis", "UI/UX Layout", "Interactive Audio Players"],
+                icon: "fa-city"
+            },
+            hydropulse: {
+                title: "HydroPulse School Flora",
+                subtitle: "Smart Environmental Sensor System",
+                tag: "Hardware & IoT Project",
+                desc: "Created for my 11th-grade senior school science project. HydroPulse uses moisture and light sensors paired with a custom web interface to track plant growth conditions in our school garden.",
+                tech: ["ESP32 / Arduino C++", "JavaScript Dashboard", "CSS Neo-Brutalist Layout"],
+                icon: "fa-seedling"
+            }
+        };
+
+        function openProjectModal(id) {
+            const data = modalData[id];
+            if(!data) return;
+
+            const modalContent = document.getElementById('modal-content');
+            modalContent.innerHTML = `
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 bg-artLime rounded-2xl brutal-border flex items-center justify-center text-2xl text-artDark">
+                        <i class="fa-solid ${data.icon}"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-mono font-bold bg-artPink text-white px-2 py-0.5 rounded border border-artDark">${data.tag}</span>
+                        <h3 class="font-syne font-extrabold text-3xl">${data.title}</h3>
+                    </div>
+                </div>
+                <p class="font-space text-neutral-800 text-base mb-6 leading-relaxed">${data.desc}</p>
+                <div class="mb-6">
+                    <div class="text-xs font-mono font-bold text-neutral-500 mb-2">KEY TECHNOLOGIES & TOOLS:</div>
+                    <div class="flex flex-wrap gap-2">
+                        ${data.tech.map(t => `<span class="bg-white px-3 py-1 rounded-lg border border-artDark font-mono text-xs font-bold">${t}</span>`).join('')}
+                    </div>
+                </div>
+                <div class="p-4 bg-artDark text-artLime rounded-2xl font-mono text-xs flex justify-between items-center">
+                    <span>STATUS: ACTIVE EXPERIMENT</span>
+                    <button onclick="closeModal()" class="px-3 py-1 bg-artLime text-artDark font-bold rounded hover:bg-artCyan">Close</button>
+                </div>
+            `;
+
+            document.getElementById('modal-backdrop').classList.remove('hidden');
+            playRandomSynthPitch();
+        }
+
+        function closeModal() {
+            document.getElementById('modal-backdrop').classList.add('hidden');
+        }
+
+        function copyEmail() {
+            const email = "sebastian.alvarado@example.com";
+            document.execCommand('copy');
+            alert("Email address copied to clipboard!");
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            alert("Transmission received! Sebastián will check your message soon. 🚀");
+            e.target.reset();
+        }
+
+        let labCanvas, labCtx, isDrawing = false;
+
+        function initLabCanvas() {
+            labCanvas = document.getElementById('lab-canvas');
+            if(!labCanvas) return;
+            labCtx = labCanvas.getContext('2d');
+            
+            // Adjust canvas resolution
+            labCanvas.width = labCanvas.offsetWidth;
+            labCanvas.height = labCanvas.offsetHeight;
+
+            labCtx.fillStyle = '#0e0e12';
+            labCtx.fillRect(0, 0, labCanvas.width, labCanvas.height);
+
+            labCanvas.onmousedown = (e) => {
+                isDrawing = true;
+                labCtx.beginPath();
+                labCtx.moveTo(e.offsetX, e.offsetY);
+            };
+
+            labCanvas.onmousemove = (e) => {
+                if(!isDrawing) return;
+                labCtx.lineWidth = Math.random() * 8 + 2;
+                labCtx.strokeStyle = ['#ccff00', '#ff007f', '#00f0ff', '#9d4edd'][Math.floor(Math.random()*4)];
+                labCtx.lineTo(e.offsetX, e.offsetY);
+                labCtx.stroke();
+            };
+
+            labCanvas.onmouseup = () => isDrawing = false;
+        }
+
+        function clearLabCanvas() {
+            if(!labCtx) return;
+            labCtx.fillStyle = '#0e0e12';
+            labCtx.fillRect(0, 0, labCanvas.width, labCanvas.height);
+            playRandomSynthPitch();
+        }
+    </script>
+</body>
+</html>

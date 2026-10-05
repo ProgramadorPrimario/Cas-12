@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeonn — Portfolio & Creative Experimental Lab</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Poppins, Space Grotesk, Syne, Kalam -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Poppins:ital,wght@0,300;0,400;0,600;0,800;0,900;1,300;1,700&family=Space+Grotesk:wght@400;600;700&family=Syne:wght@700;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif'],
+                        grotesk: ['Space Grotesk', 'sans-serif'],
+                        display: ['Syne', 'sans-serif'],
+                        hand: ['Kalam', 'cursive'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        jeonnYellow: '#FFC107',
+                        jeonnPurple: '#6821B4',
+                        jeonnBlue: '#3C84F4',
+                        jeonnRed: '#E05757',
+                        jeonnGreen: '#16BA00',
+                        jeonnDark: '#0b0b12',
+                        jeonnGrey1: '#111111',
+                        jeonnGrey2: '#333333',
+                        jeonnGrey3: '#666666',
+                    },
+                    boxShadow: {
+                        'glow-yellow': '0 0 40px rgba(255, 193, 7, 0.45)',
+                        'glow-purple': '0 0 40px rgba(104, 33, 180, 0.5)',
+                        'glow-blue': '0 0 40px rgba(60, 132, 244, 0.45)',
+                        'glow-green': '0 0 35px rgba(22, 186, 0, 0.45)',
+                        'strange': '12px 12px 0px #000000',
+                        'strange-yellow': '10px 10px 0px #FFC107',
+                        'strange-purple': '10px 10px 0px #6821B4',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #fafafa;
+            color: #111111;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        body.dark-mode {
+            background-color: #0b0b12;
+            color: #ffffff;
+        }
+
+        /* Physics interactive canvas */
+        #physics-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Dashed Button Styles as featured in screenshot */
+        .btn-dashed-green {
+            background-color: #16BA00;
+            color: white;
+            padding: 10px 28px;
+            border-radius: 9999px;
+            border: 2px dashed rgba(255, 255, 255, 0.9);
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 20px rgba(22, 186, 0, 0.3);
+        }
+        .btn-dashed-green:hover {
+            transform: scale(1.08) rotate(-2deg);
+            background-color: #139c00;
+            box-shadow: 0 12px 28px rgba(22, 186, 0, 0.5);
+        }
+
+        .btn-dashed-blue {
+            background-color: #3C84F4;
+            color: white;
+            padding: 10px 28px;
+            border-radius: 12px;
+            border: 2px dashed rgba(255, 255, 255, 0.9);
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 20px rgba(60, 132, 244, 0.3);
+        }
+        .btn-dashed-blue:hover {
+            transform: scale(1.08) rotate(3deg);
+            background-color: #246ed8;
+            box-shadow: 0 12px 28px rgba(60, 132, 244, 0.5);
+        }
+
+        /* Screenshot Blob Shapes */
+        .blob-purple-huge {
+            background: #6821B4;
+            border-top-right-radius: 200px;
+            border-bottom-right-radius: 200px;
+            transition: border-radius 0.6s ease, transform 0.4s ease;
+        }
+        .blob-purple-huge:hover {
+            border-radius: 120px 240px 180px 300px / 200px 150px 220px 100px;
+            transform: scale(1.02) skewX(-1deg);
+        }
+
+        .blob-yellow-corner {
+            background: #FFC107;
+            border-top-left-radius: 300px;
+            transition: all 0.5s ease;
+        }
+        .blob-yellow-corner:hover {
+            border-top-left-radius: 180px;
+            filter: brightness(1.08);
+        }
+
+        /* Strange Wobble Animation */
+        @keyframes strangeWobble {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            25% { transform: translate(6px, -12px) rotate(3deg) scale(1.02); }
+            50% { transform: translate(-8px, 6px) rotate(-4deg) scale(0.98); }
+            75% { transform: translate(10px, 8px) rotate(2deg) scale(1.04); }
+        }
+        .animate-strange {
+            animation: strangeWobble 6s ease-in-out infinite;
+        }
+
+        @keyframes glitchSkew {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(-8deg); }
+            24% { transform: skew(10deg); }
+            28% { transform: skew(0deg); }
+            80% { transform: skew(0deg); }
+            82% { transform: skew(5deg); }
+            84% { transform: skew(0deg); }
+        }
+        .glitch-hover:hover {
+            animation: glitchSkew 0.4s ease infinite;
+        }
+
+        /* Magnetic Liquid Nodes */
+        .node-circle {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s ease;
+        }
+        .node-circle:hover {
+            transform: scale(1.35) rotate(12deg);
+        }
+
+        /* Strange Custom Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #FFC107, #6821B4, #3C84F4, #16BA00);
+            border-radius: 6px;
+        }
+
+        /* Custom Interactive Text Selection */
+        ::selection {
+            background: #FFC107;
+            color: #000;
+        }
+    </style>
+</head>
+<body class="selection:bg-jeonnYellow selection:text-black">
+
+    <canvas id="physics-canvas"></canvas>
+
+    <!-- Navigation Bar (Matching original minimalist layout with Jeonn title & Proyectos link) -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-black/5 dark:border-white/10 transition-colors">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            
+            <!-- Left Brand -->
+            <a href="#hero" class="flex items-center gap-3 group">
+                <span class="w-4 h-4 rounded-full bg-jeonnPurple animate-pulse"></span>
+                <span class="font-poppins font-extrabold text-2xl tracking-tight group-hover:text-jeonnPurple transition">
+                    Jeonn<span class="text-jeonnYellow">.</span>
+                </span>
+                <span class="hidden sm:inline-block font-mono text-xs bg-black text-white dark:bg-white dark:text-black px-2 py-0.5 rounded-full font-bold">
+                    LAB v3.0
+                </span>
+            </a>
+
+            <!-- Center Link (Screenshot Match) -->
+            <nav class="hidden md:flex items-center gap-8 font-poppins text-sm font-medium text-neutral-600 dark:text-neutral-300">
+                <a href="#proyectos" class="hover:text-jeonnPurple transition hover:scale-105 transform inline-block">Proyectos</a>
+                <a href="#dificultades" class="hover:text-jeonnBlue transition hover:scale-105 transform inline-block">Filosofía</a>
+                <a href="#skills" class="hover:text-jeonnGreen transition hover:scale-105 transform inline-block">Habilidades</a>
+                <a href="#contacto" class="hover:text-jeonnRed transition hover:scale-105 transform inline-block">Contacto</a>
+            </nav>
+
+            <!-- Right Controls (Inspirado en Iniciar sesión / Registrarse + Strange Mode) -->
+            <div class="flex items-center gap-3">
+                <button onclick="toggleAudioSynth()" id="sound-btn" class="p-2 rounded-full border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10 text-xs font-mono transition flex items-center gap-2" title="Toggle Synthesizer Feedback">
+                    <i id="sound-icon" class="fa-solid fa-volume-xmark text-jeonnRed"></i>
+                    <span class="hidden sm:inline font-bold">AUDIO</span>
+                </button>
+
+                <button onclick="toggleTheme()" class="p-2 rounded-full border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10 text-xs font-mono transition" title="Toggle Dark/Light">
+                    <i class="fa-solid fa-moon dark:hidden"></i>
+                    <i class="fa-solid fa-sun hidden dark:inline text-jeonnYellow"></i>
+                </button>
+
+                <button onclick="triggerGravityChaos()" class="bg-jeonnPurple text-white px-5 py-2 rounded-xl font-poppins font-bold text-sm hover:scale-105 hover:bg-purple-700 active:scale-95 transition shadow-glow-purple flex items-center gap-2">
+                    <i class="fa-solid fa-burst text-jeonnYellow animate-spin"></i>
+                    <span>Modo Caos</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-20 space-y-32">
+
+        <!-- ========================================== -->
+        <!-- HERO SECTION: SABEMOS QUE HAY MOMENTOS     -->
+        <!-- ========================================== -->
+        <section id="hero" class="relative min-h-[85vh] flex items-center justify-center overflow-hidden px-6 pt-10">
+            
+            <!-- Screenshot Floating Circles (01 Black, 02 Dark Grey, 03 Medium Grey) -->
+            <div class="absolute right-[12%] top-[15%] flex flex-col gap-6 items-center z-10 pointer-events-auto">
+                <div onclick="spawnPhysicsCircle('#000000', event)" class="node-circle w-20 h-20 bg-black dark:bg-white text-white dark:text-black rounded-full flex items-center justify-center font-mono font-bold text-lg shadow-xl cursor-pointer" title="Hacer clic para soltar física">
+                    01
+                </div>
+                <div onclick="spawnPhysicsCircle('#333333', event)" class="node-circle w-24 h-24 bg-jeonnGrey2 text-white rounded-full flex items-center justify-center font-mono font-bold text-xl shadow-xl cursor-pointer" title="Hacer clic para soltar física">
+                    02
+                </div>
+                <div onclick="spawnPhysicsCircle('#666666', event)" class="node-circle w-28 h-28 bg-jeonnGrey3 text-white rounded-full flex items-center justify-center font-mono font-bold text-2xl shadow-xl cursor-pointer" title="Hacer clic para soltar física">
+                    03
+                </div>
+            </div>
+
+            <!-- Screenshot Top Right Orange & Blue Corner Blobs -->
+            <div class="absolute -top-12 -right-12 w-64 h-64 bg-amber-500 rounded-full blur-none opacity-90 animate-strange pointer-events-none z-0"></div>
+            <div class="absolute top-24 -right-16 w-52 h-72 bg-jeonnBlue rounded-b-full opacity-80 animate-strange pointer-events-none z-0" style="animation-delay: -2s;"></div>
+            
+            <!-- Bottom Left Coral Shape from Screenshot -->
+            <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-jeonnRed/90 rounded-full pointer-events-none z-0 animate-strange" style="animation-delay: -4s;"></div>
+
+            <!-- Hero Main Typography (From Screenshot) -->
+            <div class="max-w-4xl mx-auto text-center space-y-6 relative z-20">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-black/10 dark:border-white/20 bg-black/5 dark:bg-white/5 font-mono text-xs font-semibold uppercase tracking-wider">
+                    <span class="w-2.5 h-2.5 rounded-full bg-jeonnGreen animate-ping"></span>
+                    Portfolio Experimental & Desarrollador Fullstack
+                </div>
+
+                <h2 class="text-3xl sm:text-5xl font-light text-neutral-700 dark:text-neutral-300 font-poppins">
+                    Sabemos que hay momentos difíciles
+                </h2>
+
+                <h1 id="hero-title" class="text-5xl sm:text-7xl lg:text-8xl font-black font-poppins tracking-tight leading-none text-black dark:text-white hover:scale-[1.01] transition transform cursor-default">
+                    Por eso estamos <br />
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-jeonnPurple via-jeonnBlue to-jeonnYellow underline decoration-jeonnYellow decoration-wavy decoration-2">
+                        para ti
+                    </span>
+                </h1>
+
+                <p class="text-lg sm:text-2xl font-light font-grotesk text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto pt-4">
+                    Creando experiencias digitales fuera de lo común. Combinando diseño audaz, lógica avanzada y código interactivo.
+                </p>
+
+                <!-- Interactive Strange Controls -->
+                <div class="pt-8 flex flex-wrap justify-center items-center gap-4">
+                    <a href="#proyectos" class="btn-dashed-blue text-lg">
+                        <span>Ver Proyectos</span>
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </a>
+
+                    <button onclick="morphBackgroundColors()" class="btn-dashed-green text-lg">
+                        <span>Lanza Figuras</span>
+                        <i class="fa-solid fa-shapes"></i>
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION: PROYECTOS (EMPRENDIENDO & LOXI)    -->
+        <!-- ========================================== -->
+        <section id="proyectos" class="max-w-7xl mx-auto px-6 space-y-16">
+            
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-black/10 dark:border-white/10 pb-6 gap-4">
+                <div>
+                    <span class="font-mono text-xs text-jeonnPurple font-bold tracking-widest uppercase">// PROYECTOS DESTACADOS</span>
+                    <h2 class="text-4xl sm:text-6xl font-black font-poppins text-black dark:text-white">
+                        Catálogo de Creaciones
+                    </h2>
+                </div>
+                <p class="font-hand text-2xl text-jeonnPurple font-bold">
+                    "Explora la innovación sin límites"
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
+                
+                <!-- Project 1 Card: EmpreNdiendo (Matching screenshot 2 left giant purple pill card) -->
+                <div class="lg:col-span-7 blob-purple-huge p-10 sm:p-14 text-white flex flex-col justify-between shadow-2xl relative overflow-hidden group min-h-[420px]">
+                    <!-- Subtle Glitch Grid Backdrop -->
+                    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent pointer-events-none"></div>
+
+                    <div class="space-y-4 relative z-10">
+                        <span class="inline-block px-3 py-1 bg-white/20 rounded-full font-mono text-xs font-bold tracking-wider">
+                            01 / EMPRENDIMIENTO & PLATAFORMA
+                        </span>
+                        
+                        <h3 class="text-5xl sm:text-7xl font-extrabold font-poppins tracking-tight">
+                            EmpreNdiendo
+                        </h3>
+
+                        <p class="text-xl sm:text-2xl font-light text-purple-100 font-poppins">
+                            Siempre es bueno tener una mano
+                        </p>
+
+                        <p class="text-sm font-poppins text-white/80 max-w-md pt-2">
+                            Ecosistema integral diseñado para impulsar startups e ideas jóvenes con recursos interactivos, calculadoras financieras y redes de mentores.
+                        </p>
+                    </div>
+
+                    <div class="pt-8 flex flex-wrap items-center gap-4 relative z-10">
+                        <!-- Screenshot Button 1: Conoce más (Green dashed capsule button) -->
+                        <button onclick="openProjectDetails('EmpreNdiendo')" class="btn-dashed-green">
+                            Conoce más
+                        </button>
+
+                        <!-- Screenshot Button 2: Ir al proyecto (Blue dashed button) -->
+                        <button onclick="launchInteractiveDemo('EmpreNdiendo')" class="btn-dashed-blue">
+                            Ir al proyecto
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Project 2 Card: Loxi (Matching screenshot 2 bottom right yellow quadrant) -->
+                <div class="lg:col-span-5 bg-jeonnYellow blob-yellow-corner p-10 sm:p-12 text-black flex flex-col justify-between shadow-2xl relative overflow-hidden group min-h-[420px]">
+                    <div class="space-y-4 relative z-10">
+                        <span class="inline-block px-3 py-1 bg-black/10 rounded-full font-mono text-xs font-bold tracking-wider">
+                            02 / MOTOR DE LÓGICA
+                        </span>
+
+                        <h3 class="text-5xl sm:text-7xl font-extrabold font-poppins tracking-tight">
+                            Loxi
+                        </h3>
+
+                        <p class="text-xl sm:text-2xl font-normal text-black/90 font-poppins leading-snug">
+                            Hace falta una buena lógica para cambiar el mundo
+                        </p>
+
+                        <!-- Interactive Logic Simulator Widget inside Loxi -->
+                        <div class="bg-black/10 p-4 rounded-2xl border border-black/20 space-y-3 font-mono text-xs mt-4">
+                            <div class="flex justify-between items-center font-bold">
+                                <span>SIMULADOR DE LÓGICA</span>
+                                <span id="loxi-state" class="text-jeonnPurple font-black">ESTADO: ALTO</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="triggerLoxiPulse(true)" class="py-2 bg-black text-white font-bold rounded-lg hover:bg-neutral-800 transition">
+                                    ENTRADA A [1]
+                                </button>
+                                <button onclick="triggerLoxiPulse(false)" class="py-2 bg-white text-black font-bold rounded-lg hover:bg-neutral-200 transition">
+                                    ENTRADA B [0]
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-6 relative z-10 flex justify-end">
+                        <button onclick="openProjectDetails('Loxi')" class="btn-dashed-blue">
+                            Explorar Loxi <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Additional Portfolio Projects Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6">
+                
+                <!-- Project 3: Jeonn Code Lib -->
+                <div class="p-8 rounded-3xl bg-neutral-100 dark:bg-neutral-900 border-2 border-black/10 dark:border-white/10 hover:border-jeonnBlue transition space-y-4 group">
+                    <div class="w-12 h-12 rounded-2xl bg-jeonnBlue text-white flex items-center justify-center font-mono font-bold text-xl shadow-glow-blue">
+                        &lt;/&gt;
+                    </div>
+                    <h4 class="text-2xl font-bold font-poppins text-black dark:text-white group-hover:text-jeonnBlue transition">
+                        Jeonn Code Lib
+                    </h4>
+                    <p class="text-sm text-neutral-600 dark:text-neutral-400 font-poppins">
+                        Biblioteca de JavaScript y utilidades CSS con físicas preconstruidas, renderizado orgánico y componentes cinéticos.
+                    </p>
+                    <button onclick="openProjectDetails('CodeLib')" class="text-jeonnBlue font-bold font-mono text-xs uppercase tracking-wider hover:underline">
+                        Saber más &rarr;
+                    </button>
+                </div>
+
+                <!-- Project 4: Entropy Physics Lab -->
+                <div class="p-8 rounded-3xl bg-neutral-100 dark:bg-neutral-900 border-2 border-black/10 dark:border-white/10 hover:border-jeonnRed transition space-y-4 group">
+                    <div class="w-12 h-12 rounded-2xl bg-jeonnRed text-white flex items-center justify-center font-mono font-bold text-xl shadow-lg">
+                        <i class="fa-solid fa-atom animate-spin"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold font-poppins text-black dark:text-white group-hover:text-jeonnRed transition">
+                        Entropy Engine
+                    </h4>
+                    <p class="text-sm text-neutral-600 dark:text-neutral-400 font-poppins">
+                        Simulador visual de partículas y colisiones fluidas para interfaces web de alta fidelidad.
+                    </p>
+                    <button onclick="openProjectDetails('Entropy')" class="text-jeonnRed font-bold font-mono text-xs uppercase tracking-wider hover:underline">
+                        Saber más &rarr;
+                    </button>
+                </div>
+
+                <!-- Project 5: Jade UI Design System -->
+                <div class="p-8 rounded-3xl bg-neutral-100 dark:bg-neutral-900 border-2 border-black/10 dark:border-white/10 hover:border-jeonnGreen transition space-y-4 group">
+                    <div class="w-12 h-12 rounded-2xl bg-jeonnGreen text-white flex items-center justify-center font-mono font-bold text-xl shadow-glow-green">
+                        <i class="fa-solid fa-palette"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold font-poppins text-black dark:text-white group-hover:text-jeonnGreen transition">
+                        Jade UI System
+                    </h4>
+                    <p class="text-sm text-neutral-600 dark:text-neutral-400 font-poppins">
+                        Sistema de diseño moderno enfocado en accesibilidad, curvas dinámicas y paletas de color vibrantes.
+                    </p>
+                    <button onclick="openProjectDetails('JadeUI')" class="text-jeonnGreen font-bold font-mono text-xs uppercase tracking-wider hover:underline">
+                        Saber más &rarr;
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION: FILOSOFÍA & FIGURAS GEOMÉTRICAS   -->
+        <!-- ========================================== -->
+        <section id="dificultades" class="max-w-7xl mx-auto px-6 space-y-12">
+            
+            <div class="text-center max-w-3xl mx-auto space-y-3">
+                <span class="font-mono text-xs text-jeonnGreen font-bold tracking-widest uppercase">// RESILIENCIA & VISIÓN</span>
+                <h2 class="text-4xl sm:text-6xl font-black font-poppins text-black dark:text-white">
+                    Convertimos la dificultad en impulso
+                </h2>
+                <p class="text-lg font-light text-neutral-600 dark:text-neutral-400 font-poppins">
+                    Las mejores soluciones nacen de los retos más complejos.
+                </p>
+            </div>
+
+            <!-- Vector Figures Grid (Inspirado en la figura 865, 898, 867, 866) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Card 1: Fig 865 (Orange/Yellow) -->
+                <div class="p-6 rounded-3xl bg-neutral-100 dark:bg-neutral-900 border border-black/10 dark:border-white/10 hover:shadow-strange-yellow transition transform hover:-translate-y-2 group">
+                    <div class="w-full h-36 rounded-2xl bg-gradient-to-tr from-amber-500 to-jeonnYellow p-4 flex items-center justify-center relative overflow-hidden">
+                        <svg class="w-20 h-20 text-black opacity-80 group-hover:scale-125 transition transform" viewBox="0 0 100 100" fill="currentColor">
+                            <path d="M20,20 L80,10 L90,80 L10,90 Z" />
+                        </svg>
+                        <span class="absolute bottom-2 right-3 font-mono text-[10px] bg-black text-white px-2 py-0.5 rounded font-bold">FIGURA 865</span>
+                    </div>
+                    <h3 class="font-poppins text-xl font-bold text-black dark:text-white mt-4">Soporte Continuo</h3>
+                    <p class="text-xs text-neutral-600 dark:text-neutral-400 font-poppins mt-2">
+                        Acompañamiento iterativo en cada fase de arquitectura, diseño y despliegue.
+                    </p>
+                </div>
+
+                <!-- Card 2: Fig 898 (Blue) -->
+                <div class="p-6 rounded-3xl bg-neutral-100 dark:bg-neutral-900 border border-black/10 dark:border-white/10 hover:shadow-glow-blue transition transform hover:-translate-y-2 group">
+                    <div class="w-full h-36 rounded-2xl bg-gradient-to-tr from-blue-600 to-jeonnBlue p-4 flex items-center justify-center relative overflow-hidden">
+                        <svg class="w-20 h-20 text-white opacity-90 group-hover:rotate-45 transition transform" viewBox="0 0 100 100" fill="currentColor">
+                            <circle cx="50" cy="50" r="40" />
+                        </svg>
+                        <span class="absolute bottom-2 right-3 font-mono text-[10px] bg-white text-black px-2 py-0.5 rounded font-bold">FIGURA 898</span>
+                    </div>
+                    <h3 class="font-poppins text-xl font-bold text-black dark:text-white mt-4">Ecosistema Colaborativo</h3>
+                    <p class="text-xs text-neutral-600 dark:text-neutral-400 font-poppins mt-2">
+                        Creación de alianzas estratégicas entre desarrolladores, creadores y usuarios.
+                    </p>
+                </div>
+
+                <!-- Card 3: Fig 867 (Red) -->
+                <div class="p-6 rounded-3xl bg-neutral-100 dark:bg-neutral-900 border border-black/10 dark:border-white/10 hover:shadow-strange-purple transition transform hover:-translate-y-2 group">
+                    <div class="w-full h-36 rounded-2xl bg-gradient-to-tr from-red-600 to-jeonnRed p-4 flex items-center justify-center relative overflow-hidden">
+                        <svg class="w-20 h-20 text-white opacity-90 group-hover:scale-90 transition transform" viewBox="0 0 100 100" fill="currentColor">
+                            <polygon points="50,10 90,90 10,90" />
+                        </svg>
+                        <span class="absolute bottom-2 right-3 font-mono text-[10px] bg-black text-white px-2 py-0.5 rounded font-bold">FIGURA 867</span>
+                    </div>
+                    <h3 class="font-poppins text-xl font-bold text-black dark:text-white mt-4">Recursos Abiertos</h3>
+                    <p class="text-xs text-neutral-600 dark:text-neutral-400 font-poppins mt-2">
+                        Código accesible, documentación transparente y bibliotecas públicas.
+                    </p>
+                </div>
+
+                <!-- Card 4: Fig 866 (Green) -->
+                <div class="p-6 rounded-3xl bg-neutral-100 dark:bg-neutral-900 border border-black/10 dark:border-white/10 hover:shadow-glow-green transition transform hover:-translate-y-2 group">
+                    <div class="w-full h-36 rounded-2xl bg-gradient-to-tr from-emerald-600 to-jeonnGreen p-4 flex items-center justify-center relative overflow-hidden">
+                        <svg class="w-20 h-20 text-white opacity-90 group-hover:rotate-12 transition transform" viewBox="0 0 100 100" fill="currentColor">
+                            <rect x="15" y="15" width="70" height="70" rx="20" />
+                        </svg>
+                        <span class="absolute bottom-2 right-3 font-mono text-[10px] bg-black text-white px-2 py-0.5 rounded font-bold">FIGURA 866</span>
+                    </div>
+                    <h3 class="font-poppins text-xl font-bold text-black dark:text-white mt-4">Crecimiento Medible</h3>
+                    <p class="text-xs text-neutral-600 dark:text-neutral-400 font-poppins mt-2">
+                        Resultados tangibles con métricas claras y optimización continua.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION: SKILLS INTERACTIVE PLAYGROUND     -->
+        <!-- ========================================== -->
+        <section id="skills" class="max-w-7xl mx-auto px-6 space-y-8">
+            <div class="bg-black text-white p-10 sm:p-14 rounded-3xl shadow-strange relative overflow-hidden">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-white/20 pb-6">
+                    <div>
+                        <span class="font-mono text-xs text-jeonnYellow uppercase tracking-widest">// HABILIDADES Y TECNOLOGÍAS</span>
+                        <h2 class="text-4xl sm:text-6xl font-black font-poppins mt-1">Nodos Tecnológicos</h2>
+                    </div>
+                    <button onclick="explodeSkillNodes()" class="px-6 py-3 bg-jeonnYellow text-black font-poppins font-bold rounded-xl hover:bg-amber-400 transition transform hover:scale-105 active:scale-95 shadow-glow-yellow">
+                        <i class="fa-solid fa-explosion mr-2"></i> Explotar Nodos
+                    </button>
+                </div>
+
+                <div class="pt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4" id="skills-container">
+                    <!-- Dynamic Skill Pills -->
+                    <div class="skill-node p-4 bg-white/10 rounded-2xl border border-white/15 text-center font-mono text-sm hover:bg-jeonnPurple hover:border-jeonnPurple cursor-pointer transition transform hover:-translate-y-2">
+                        JavaScript ES6+
+                    </div>
+                    <div class="skill-node p-4 bg-white/10 rounded-2xl border border-white/15 text-center font-mono text-sm hover:bg-jeonnBlue hover:border-jeonnBlue cursor-pointer transition transform hover:-translate-y-2">
+                        React / Next.js
+                    </div>
+                    <div class="skill-node p-4 bg-white/10 rounded-2xl border border-white/15 text-center font-mono text-sm hover:bg-jeonnGreen hover:border-jeonnGreen cursor-pointer transition transform hover:-translate-y-2">
+                        Node.js & Express
+                    </div>
+                    <div class="skill-node p-4 bg-white/10 rounded-2xl border border-white/15 text-center font-mono text-sm hover:bg-jeonnYellow hover:text-black cursor-pointer transition transform hover:-translate-y-2">
+                        Tailwind CSS
+                    </div>
+                    <div class="skill-node p-4 bg-white/10 rounded-2xl border border-white/15 text-center font-mono text-sm hover:bg-jeonnRed hover:border-jeonnRed cursor-pointer transition transform hover:-translate-y-2">
+                        Python / FastApi
+                    </div>
+                    <div class="skill-node p-4 bg-white/10 rounded-2xl border border-white/15 text-center font-mono text-sm hover:bg-purple-600 hover:border-purple-600 cursor-pointer transition transform hover:-translate-y-2">
+                        WebGL / Canvas
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION: CONTACTO & FORMULARIO            -->
+        <!-- ========================================== -->
+        <section id="contacto" class="max-w-7xl mx-auto px-6">
+            <div class="bg-jeonnBlue text-white p-10 sm:p-14 rounded-3xl shadow-glow-blue relative overflow-hidden">
+                
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 border-b border-white/20 pb-8">
+                    <div>
+                        <span class="font-mono text-xs uppercase tracking-widest text-jeonnYellow font-bold">// HABLEMOS</span>
+                        <h2 class="text-4xl sm:text-6xl font-black font-poppins mt-1">Inicia un Proyecto</h2>
+                    </div>
+
+                    <!-- User/Empresa Toggle Switch (Screenshot Style) -->
+                    <div class="bg-black/20 p-1.5 rounded-2xl flex items-center gap-1 border border-white/20">
+                        <button type="button" onclick="setContactMode('usuario')" id="mode-user-btn" class="px-6 py-2.5 rounded-xl font-poppins text-sm font-bold transition bg-jeonnGreen text-white shadow-glow-green">
+                            Usuario
+                        </button>
+                        <button type="button" onclick="setContactMode('empresa')" id="mode-company-btn" class="px-6 py-2.5 rounded-xl font-poppins text-sm font-bold transition text-white/80 hover:text-white">
+                            Empresa
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 pt-8">
+                    
+                    <!-- Contact Form -->
+                    <form onsubmit="submitContactForm(event)" class="lg:col-span-7 space-y-5">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div class="space-y-1">
+                                <label for="contact-name" class="font-poppins text-xs font-semibold text-white/80">Tu Nombre</label>
+                                <input type="text" id="contact-name" name="nombre" required placeholder="Ej. Carlos Mendoza" class="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-xl font-poppins text-sm text-white placeholder-white/50 focus:outline-none focus:border-jeonnYellow transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label for="contact-role" class="font-poppins text-xs font-semibold text-white/80">Cargo o Perfil</label>
+                                <input type="text" id="contact-role" name="cargo" required placeholder="Ej. Founder, Diseñador..." class="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-xl font-poppins text-sm text-white placeholder-white/50 focus:outline-none focus:border-jeonnYellow transition">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div class="space-y-1">
+                                <label for="contact-phone" class="font-poppins text-xs font-semibold text-white/80">Teléfono / WhatsApp</label>
+                                <input type="tel" id="contact-phone" name="telefono" required placeholder="+57 300 123 4567" class="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-xl font-poppins text-sm text-white placeholder-white/50 focus:outline-none focus:border-jeonnYellow transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label for="contact-country" class="font-poppins text-xs font-semibold text-white/80">País</label>
+                                <input type="text" id="contact-country" name="pais" required placeholder="Colombia, México, España..." class="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-xl font-poppins text-sm text-white placeholder-white/50 focus:outline-none focus:border-jeonnYellow transition">
+                            </div>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label for="contact-email" class="font-poppins text-xs font-semibold text-white/80">Correo Electrónico</label>
+                            <input type="email" id="contact-email" name="correo" required placeholder="tu@correo.com" class="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-xl font-poppins text-sm text-white placeholder-white/50 focus:outline-none focus:border-jeonnYellow transition">
+                        </div>
+
+                        <div class="space-y-1">
+                            <label for="contact-msg" class="font-poppins text-xs font-semibold text-white/80">Mensaje o Idea</label>
+                            <textarea id="contact-msg" name="mensaje" rows="4" required placeholder="Cuéntanos sobre tu proyecto..." class="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-xl font-poppins text-sm text-white placeholder-white/50 focus:outline-none focus:border-jeonnYellow transition"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-dashed-green text-lg w-full sm:w-auto justify-center">
+                            <span>Enviar Mensaje</span>
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </form>
+
+                    <!-- Informational Box (Matching paragraphs 10, 11, 12) -->
+                    <div class="lg:col-span-5 bg-black/30 p-6 rounded-2xl border border-white/20 font-poppins text-xs sm:text-sm space-y-4">
+                        <div class="p-4 bg-white/5 rounded-xl border-l-4 border-jeonnYellow space-y-1">
+                            <h4 class="font-bold text-white">Términos de Respuesta</h4>
+                            <p class="text-white/80">Al enviar este formulario aceptas ser contactado vía correo electrónico o WhatsApp.</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border-l-4 border-jeonnGreen space-y-1">
+                            <h4 class="font-bold text-white">Atención Personalizada</h4>
+                            <p class="text-white/80">Revisamos cada mensaje en menos de 24 horas laborables.</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border-l-4 border-jeonnPurple space-y-1">
+                            <h4 class="font-bold text-white">Garantía de Confidencialidad</h4>
+                            <p class="text-white/80">Tus datos e ideas permanecen 100% protegidos y seguros.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION: MANIFIESTO TYPOGRAPHIC BENDER     -->
+        <!-- ========================================== -->
+        <section class="max-w-5xl mx-auto px-6 text-center space-y-8 py-10">
+            <span class="font-mono text-xs text-jeonnYellow font-bold uppercase tracking-widest bg-black px-4 py-1.5 rounded-full">// MANIFIESTO CREATIVO</span>
+            
+            <div class="space-y-4">
+                <h2 class="text-4xl sm:text-7xl font-black font-poppins uppercase tracking-wider text-black dark:text-white">
+                    SEAS QUIEN SEAS
+                </h2>
+                <h3 class="text-3xl sm:text-6xl font-extrabold font-grotesk uppercase text-jeonnPurple">
+                    VENGAS DE DONDE VENGAS
+                </h3>
+                <div class="py-6">
+                    <span onclick="triggerHugePulse()" class="inline-block text-6xl sm:text-9xl font-black text-jeonnYellow font-display tracking-tight hover:scale-110 transition transform cursor-pointer p-6 rounded-3xl bg-black border-4 border-jeonnYellow shadow-glow-yellow">
+                        TÚ PUEDES
+                    </span>
+                </div>
+                <p class="text-3xl sm:text-5xl font-hand font-bold text-neutral-700 dark:text-neutral-300">
+                    Cambiar al mundo con código y pasión
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-black/10 dark:border-white/10 bg-neutral-900 text-white py-16 mt-32">
+        <div class="max-w-7xl mx-auto px-6 space-y-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 font-poppins text-xs text-neutral-400">
+                <div class="space-y-3">
+                    <h4 class="font-bold font-grotesk text-white text-base">Contacto</h4>
+                    <p class="hover:text-jeonnYellow transition cursor-pointer">Instagram: @jeonn.lab</p>
+                    <p class="hover:text-jeonnBlue transition cursor-pointer">GitHub: @jeonn-dev</p>
+                    <p class="hover:text-jeonnGreen transition cursor-pointer">LinkedIn: /in/jeonn</p>
+                </div>
+                <div class="space-y-3">
+                    <h4 class="font-bold font-grotesk text-white text-base">Proyectos</h4>
+                    <ul class="space-y-1">
+                        <li>EmpreNdiendo</li>
+                        <li>LOXI Logic Engine</li>
+                        <li>Jeonn Code Lib</li>
+                        <li>Entropy Physics</li>
+                        <li>Jade Design</li>
+                    </ul>
+                </div>
+                <div class="space-y-3">
+                    <h4 class="font-bold font-grotesk text-white text-base">Especificaciones</h4>
+                    <ul class="space-y-1">
+                        <li>Términos y Condiciones</li>
+                        <li>Licencia Open Source</li>
+                        <li>Privacidad de Datos</li>
+                    </ul>
+                </div>
+                <div class="p-6 bg-white/5 rounded-2xl border border-white/10 flex flex-col justify-center text-center space-y-2">
+                    <i class="fa-solid fa-quote-left text-jeonnYellow text-2xl"></i>
+                    <p class="font-hand text-lg text-jeonnYellow">"Ama, porque amar es vivir"</p>
+                </div>
+            </div>
+
+            <div class="border-t border-white/10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <span class="font-black text-2xl font-poppins text-white">Jeonn Inc.</span>
+                <p class="font-mono text-xs text-neutral-500">© 2026 Ecosistema Jeonn. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Universal Project Modal -->
+    <div id="portfolio-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="bg-neutral-900 border-2 border-jeonnYellow text-white max-w-lg w-full rounded-3xl p-8 shadow-glow-yellow relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-white/70 hover:text-white font-mono text-xl">✕</button>
+            <div id="modal-body" class="space-y-4"></div>
+        </div>
+    </div>
+
+    <!-- Interactive Engine Scripts -->
+    <script>
+        // Physics Particle Engine with Matter-like kinetic circles
+        const canvas = document.getElementById('physics-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let chaosGravity = false;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class KineticParticle {
+            constructor(x, y, color = null, radius = null) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius || Math.random() * 18 + 6;
+                this.vx = (Math.random() - 0.5) * 6;
+                this.vy = (Math.random() - 0.5) * 6 - 2;
+                this.gravity = 0.15;
+                this.bounce = 0.75;
+                this.color = color || ['#FFC107', '#6821B4', '#3C84F4', '#E05757', '#16BA00'][Math.floor(Math.random() * 5)];
+                this.life = 1.0;
+                this.isPersistent = false;
+            }
+
+            update() {
+                if (chaosGravity) {
+                    this.vx += (Math.random() - 0.5) * 1.5;
+                    this.vy += (Math.random() - 0.5) * 1.5;
+                } else {
+                    this.vy += this.gravity;
+                }
+
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Floor bounce
+                if (this.y + this.radius > canvas.height) {
+                    this.y = canvas.height - this.radius;
+                    this.vy *= -this.bounce;
+                }
+                // Wall bounce
+                if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) {
+                    this.vx *= -this.bounce;
+                }
+
+                if (!this.isPersistent) {
+                    this.life -= 0.005;
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = Math.max(this.life, 0);
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+
+        // Pointer trail particle spawner
+        
+
+        function renderParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].life <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+            requestAnimationFrame(renderParticles);
+        }
+        renderParticles();
+
+        // Spawn specific circles matching screenshot 01, 02, 03
+        function spawnPhysicsCircle(color, event) {
+            const rect = event.target.getBoundingClientRect();
+            for (let i = 0; i < 12; i++) {
+                particles.push(new KineticParticle(rect.left + rect.width / 2, rect.top + rect.height / 2, color, 20));
+            }
+            playSynthesizerTone(440 + Math.random() * 200);
+        }
+
+        // Chaos Gravity Toggle
+        function triggerGravityChaos() {
+            chaosGravity = !chaosGravity;
+            for (let i = 0; i < 40; i++) {
+                particles.push(new KineticParticle(window.innerWidth / 2, window.innerHeight / 2));
+            }
+            playSynthesizerTone(880);
+        }
+
+        // Web Audio Synthesizer Tone Generator
+        let audioCtx = null;
+        let soundEnabled = false;
+
+        function toggleAudioSynth() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('sound-icon');
+            if (soundEnabled) {
+                audioCtx.resume();
+                icon.className = 'fa-solid fa-volume-high text-jeonnGreen';
+                playSynthesizerTone(523.25);
+            } else {
+                icon.className = 'fa-solid fa-volume-xmark text-jeonnRed';
+            }
+        }
+
+        function playSynthesizerTone(freq) {
+            if (!soundEnabled || !audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
+        // Loxi Interactive Logic Simulator
+        let loxiActive = true;
+        function triggerLoxiPulse(state) {
+            loxiActive = state;
+            const el = document.getElementById('loxi-state');
+            if (loxiActive) {
+                el.textContent = 'ESTADO: ALTO [1]';
+                el.className = 'text-jeonnPurple font-black';
+                playSynthesizerTone(659.25);
+            } else {
+                el.textContent = 'ESTADO: BAJO [0]';
+                el.className = 'text-jeonnRed font-black';
+                playSynthesizerTone(329.63);
+            }
+        }
+
+        // Theme Switcher (Dark/Light Mode)
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            playSynthesizerTone(600);
+        }
+
+        // Contact Form Mode Toggle
+        let currentContactMode = 'usuario';
+        function setContactMode(mode) {
+            currentContactMode = mode;
+            const btnU = document.getElementById('mode-user-btn');
+            const btnC = document.getElementById('mode-company-btn');
+            if (mode === 'usuario') {
+                btnU.className = 'px-6 py-2.5 rounded-xl font-poppins text-sm font-bold transition bg-jeonnGreen text-white shadow-glow-green';
+                btnC.className = 'px-6 py-2.5 rounded-xl font-poppins text-sm font-bold transition text-white/80 hover:text-white';
+            } else {
+                btnC.className = 'px-6 py-2.5 rounded-xl font-poppins text-sm font-bold transition bg-jeonnPurple text-white shadow-glow-purple';
+                btnU.className = 'px-6 py-2.5 rounded-xl font-poppins text-sm font-bold transition text-white/80 hover:text-white';
+            }
+            playSynthesizerTone(700);
+        }
+
+        function submitContactForm(e) {
+            e.preventDefault();
+            playSynthesizerTone(800);
+            const name = document.getElementById('contact-name').value || 'Amigo';
+            showModal(`
+                <div class="text-center space-y-4">
+                    <div class="w-16 h-16 bg-jeonnGreen rounded-full flex items-center justify-center mx-auto text-white text-3xl shadow-glow-green">
+                        ✓
+                    </div>
+                    <h3 class="text-3xl font-black font-poppins">¡Mensaje Recibido, ${name}!</h3>
+                    <p class="text-sm font-poppins text-neutral-300">
+                        Hemos registrado tu solicitud para el perfil <strong>${currentContactMode.toUpperCase()}</strong>. Nos pondremos en contacto contigo a la brevedad.
+                    </p>
+                    <button onclick="closeModal()" class="btn-dashed-green">
+                        Entendido
+                    </button>
+                </div>
+            `);
+            e.target.reset();
+        }
+
+        // Project details modal trigger
+        const projectData = {
+            EmpreNdiendo: {
+                title: "EmpreNdiendo",
+                tag: "EMPRENDIMIENTO & STARTUPS",
+                desc: "Plataforma interactiva para la incubación de ideas, análisis financiero y mentoría colaborativa entre emprendedores y expertos."
+            },
+            Loxi: {
+                title: "LOXI Engine",
+                tag: "LÓGICA DE PROGRAMACIÓN",
+                desc: "Motor educativo de lógica simbólica que simplifica conceptos complejos de circuitos lógicos y pensamiento algorítmico."
+            },
+            CodeLib: {
+                title: "Jeonn Code Lib",
+                tag: "BIBLIOTECA DE CÓDIGO",
+                desc: "Librería utilitaria JavaScript con módulos de animación física, manipulación de Canvas y componentes web reutilizables."
+            },
+            Entropy: {
+                title: "Entropy Physics",
+                tag: "SIMULACIÓN FÍSICA",
+                desc: "Motor de partículas kinéticas y sistemas de colisión para la construcción de interfaces interactivas de alta fidelidad."
+            },
+            JadeUI: {
+                title: "Jade UI System",
+                tag: "SISTEMA DE DISEÑO",
+                desc: "Guias visuales, tokens de diseño y componentes UI accesibles diseñados para el ecosistema Jeonn."
+            }
+        };
+
+        function openProjectDetails(key) {
+            const item = projectData[key];
+            if (!item) return;
+            showModal(`
+                <span class="px-3 py-1 bg-jeonnYellow text-black rounded-full font-mono text-xs font-bold">${item.tag}</span>
+                <h3 class="text-4xl font-black font-poppins mt-2">${item.title}</h3>
+                <p class="text-sm font-poppins text-neutral-300 leading-relaxed">${item.desc}</p>
+                <div class="pt-4 flex justify-end">
+                    <button onclick="closeModal()" class="btn-dashed-blue">
+                        Cerrar
+                    </button>
+                </div>
+            `);
+            playSynthesizerTone(550);
+        }
+
+        function launchInteractiveDemo(key) {
+            for (let i = 0; i < 30; i++) {
+                particles.push(new KineticParticle(window.innerWidth / 2, window.innerHeight / 2, '#3C84F4'));
+            }
+            openProjectDetails(key);
+        }
+
+        function showModal(contentHtml) {
+            document.getElementById('modal-body').innerHTML = contentHtml;
+            document.getElementById('portfolio-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('portfolio-modal').classList.add('hidden');
+        }
+
+        // Morph Background & Explode Skills
+        function morphBackgroundColors() {
+            for (let i = 0; i < 25; i++) {
+                particles.push(new KineticParticle(Math.random() * window.innerWidth, Math.random() * window.innerHeight));
+            }
+            playSynthesizerTone(750);
+        }
+
+        function explodeSkillNodes() {
+            const container = document.getElementById('skills-container');
+            container.classList.add('animate-strange');
+            setTimeout(() => container.classList.remove('animate-strange'), 1000);
+            for (let i = 0; i < 35; i++) {
+                particles.push(new KineticParticle(window.innerWidth / 2, window.innerHeight / 2, '#FFC107'));
+            }
+            playSynthesizerTone(900);
+        }
+
+        function triggerHugePulse() {
+            for (let i = 0; i < 50; i++) {
+                particles.push(new KineticParticle(window.innerWidth / 2, window.innerHeight / 2, '#FFC107', 30));
+            }
+            playSynthesizerTone(1000);
+        }
+    </script>
+</body>
+</html>

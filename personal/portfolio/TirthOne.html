@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEBASTIÁN ALVARADO — Minimal Human Rebel CV & Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Instrument Serif, Caveat, Space Mono, Plus Jakarta Sans, Kalam -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Instrument+Serif:ital@0;1&family=Kalam:wght@300;400;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Instrument Serif', 'serif'],
+                        hand: ['Caveat', 'cursive'],
+                        scribble: ['Kalam', 'cursive'],
+                        mono: ['Space Mono', 'monospace'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        paperBg: '#f6f4ee',
+                        paperCard: '#f0ede4',
+                        paperDarkCard: '#e6e2d5',
+                        inkBlack: '#121212',
+                        pencilGray: '#555555',
+                        ballpointBlue: '#0038ff',
+                        rebelRed: '#ff3b30',
+                        highlighterYellow: '#ffe600',
+                        tapeBeige: '#e3dcbe',
+                        stainBrown: 'rgba(180, 140, 90, 0.12)',
+                    },
+                    boxShadow: {
+                        'paper': '3px 5px 18px rgba(0, 0, 0, 0.06)',
+                        'lift': '0 16px 36px -12px rgba(0, 0, 0, 0.15)',
+                        'stamp': '0 2px 8px rgba(0, 0, 0, 0.12)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #f6f4ee;
+            color: #121212;
+            background-image: radial-gradient(#d5cfbf 0.8px, transparent 0.8px);
+            background-size: 24px 24px;
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background: #ffe600;
+            color: #000;
+        }
+
+        /* Handwritten Highlighter Effect */
+        .highlight {
+            background: linear-gradient(104deg, rgba(255, 230, 0, 0) 0.9%, rgba(255, 230, 0, 0.85) 2.4%, rgba(255, 230, 0, 0.75) 92.6%, rgba(255, 230, 0, 0) 99.1%);
+            border-radius: 0.3em 0.1em 0.4em 0.2em;
+            padding: 0.1em 0.3em;
+        }
+
+        .highlight-blue {
+            background: linear-gradient(104deg, rgba(0, 56, 255, 0) 0.9%, rgba(0, 56, 255, 0.18) 2.4%, rgba(0, 56, 255, 0.22) 92.6%, rgba(0, 56, 255, 0) 99.1%);
+            border-radius: 0.3em;
+            padding: 0.1em 0.3em;
+        }
+
+        .highlight-red {
+            background: linear-gradient(104deg, rgba(255, 59, 48, 0) 0.9%, rgba(255, 59, 48, 0.18) 2.4%, rgba(255, 59, 48, 0.2) 92.6%, rgba(255, 59, 48, 0) 99.1%);
+            border-radius: 0.3em;
+            padding: 0.1em 0.3em;
+        }
+
+        /* Paper Tape Simulation */
+        .paper-tape {
+            background: rgba(232, 222, 195, 0.85);
+            backdrop-filter: blur(2px);
+            border-left: 2px dashed rgba(0, 0, 0, 0.08);
+            border-right: 2px dashed rgba(0, 0, 0, 0.08);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+
+        /* Handwritten Scribble Margin Notes */
+        .handwritten-note {
+            font-family: 'Caveat', cursive;
+            color: #0038ff;
+            line-height: 1.1;
+        }
+
+        /* Strikethrough effect for "conventional rules" */
+        .rule-broken {
+            text-decoration: line-through;
+            text-decoration-color: #ff3b30;
+            text-decoration-thickness: 2.5px;
+            opacity: 0.65;
+        }
+
+        /* Freehand Canvas Overlay */
+        #doodle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 40;
+            pointer-events: none;
+        }
+        #doodle-canvas.active {
+            pointer-events: auto;
+            cursor: crosshair;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f6f4ee;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #121212;
+            border-radius: 4px;
+        }
+
+        /* Interactive Draggable Cards */
+        .sticky-paper {
+            cursor: grab;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .sticky-paper:active {
+            cursor: grabbing;
+            transform: scale(1.03) rotate(0deg) !important;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+            z-index: 30;
+        }
+
+        /* Redaction Lens revealing hidden handwritten notes */
+        .redacted-text {
+            background-color: #121212;
+            color: transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-radius: 2px;
+            padding: 0 4px;
+        }
+        .redacted-text:hover, body.show-redactions .redacted-text {
+            background-color: transparent;
+            color: #0038ff;
+            font-family: 'Caveat', cursive;
+            font-size: 1.1em;
+            font-weight: 700;
+        }
+
+        /* Stamp perforation border */
+        .postage-stamp {
+            border: 2px dashed #121212;
+            position: relative;
+            background: #f0ede4;
+        }
+
+        /* Dynamic Wheel Animation */
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spinSlow 20s linear infinite;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-inkBlack leading-relaxed select-none sm:select-auto">
+
+    <canvas id="doodle-canvas"></canvas>
+
+    <header class="fixed top-3 left-0 right-0 z-50 px-3 md:px-8 pointer-events-none">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 pointer-events-auto">
+            
+            <!-- Left Badge: Sebastian's Live Status -->
+            <div class="bg-paperCard/90 backdrop-blur-md border border-inkBlack/15 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full shadow-paper flex items-center gap-2 sm:gap-3">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="font-mono text-[11px] sm:text-xs font-bold tracking-tight text-inkBlack">SEBASTIÁN ALVARADO</span>
+                <span class="hidden md:inline font-mono text-[10px] bg-inkBlack/10 px-2 py-0.5 rounded text-pencilGray">15 Y/O</span>
+                <span class="font-hand text-base sm:text-lg text-ballpointBlue hidden sm:inline">- Medellín 🇨🇴</span>
+            </div>
+
+            <!-- Right Controls: Redaction Lens, Drawing Tools, Acoustic Audio -->
+            <div class="bg-paperCard/90 backdrop-blur-md border border-inkBlack/15 rounded-full px-2 py-1 sm:px-3 sm:py-1.5 shadow-paper flex items-center gap-1.5 sm:gap-2 text-xs">
+                
+                <!-- Redaction Lens Toggle -->
+                <button onclick="toggleRedactionMode()" id="redact-btn" class="px-2.5 py-1 rounded-full font-mono text-[11px] font-semibold border border-inkBlack/20 hover:bg-inkBlack/5 transition flex items-center gap-1.5" title="Toggle X-Ray / Redaction Lens">
+                    <i class="fa-solid fa-eye text-ballpointBlue"></i>
+                    <span class="hidden lg:inline">X-Ray Notes</span>
+                </button>
+
+                <!-- Freehand Draw Toggle -->
+                <button id="draw-toggle-btn" onclick="toggleDoodleMode()" class="px-2.5 py-1 rounded-full font-mono text-[11px] font-semibold bg-inkBlack text-paperBg hover:opacity-85 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-pen-nib text-highlighterYellow"></i>
+                    <span id="draw-btn-text" class="hidden sm:inline">Draw / Scribble</span>
+                </button>
+
+                <!-- Color Palette (Shows in Draw Mode) -->
+                <div id="draw-palette" class="hidden flex items-center gap-1.5 px-1.5 border-l border-inkBlack/20">
+                    <button onclick="setBrushColor('#ffe600')" class="w-4 h-4 rounded-full bg-highlighterYellow border border-black/20" title="Yellow Highlighter"></button>
+                    <button onclick="setBrushColor('#0038ff')" class="w-4 h-4 rounded-full bg-ballpointBlue border border-black/20" title="Ballpoint Blue Ink"></button>
+                    <button onclick="setBrushColor('#ff3b30')" class="w-4 h-4 rounded-full bg-rebelRed border border-black/20" title="Rebel Red Pen"></button>
+                    <button onclick="setBrushColor('eraser')" class="px-1.5 py-0.5 font-mono text-[9px] bg-inkBlack/10 rounded hover:bg-inkBlack/20" title="Eraser">Eraser</button>
+                    <button onclick="clearCanvas()" class="text-[10px] font-mono text-pencilGray hover:text-inkBlack ml-1" title="Clear Canvas">Clear</button>
+                </div>
+
+                <div class="w-px h-4 bg-inkBlack/20 mx-0.5"></div>
+
+                <!-- Acoustic Audio Feedback Toggle -->
+                <button onclick="toggleAcousticAudio()" id="audio-btn" class="w-7 h-7 rounded-full border border-inkBlack/20 flex items-center justify-center hover:bg-inkBlack/10 text-inkBlack transition" title="Toggle Tactile Audio Sound FX">
+                    <i id="audio-icon" class="fa-solid fa-volume-xmark text-xs"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative pt-24 sm:pt-28 pb-32 px-4 md:px-12 max-w-7xl mx-auto space-y-24 sm:space-y-32">
+
+        <section id="hero" class="relative pt-4 sm:pt-8 pb-6">
+            
+            <!-- Simulated Coffee Ring Stain -->
+            <div class="absolute -top-12 right-2 md:right-12 w-44 h-44 sm:w-56 sm:h-56 rounded-full border-[14px] border-stainBrown pointer-events-none opacity-40 blur-[1px]"></div>
+            
+            <!-- Handwritten Margin Callout -->
+            <div class="absolute -top-4 left-2 md:left-0 transform -rotate-6 font-hand text-xl sm:text-2xl text-ballpointBlue hidden lg:block">
+                ↳ "I make web systems, creative code & hardware.<br>&nbsp;&nbsp;&nbsp;Always hunting for what's brand new."
+            </div>
+
+            <!-- Header Date & Status Stamp -->
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-6 font-mono text-xs border-b border-inkBlack/15 pb-3">
+                <div class="flex items-center gap-2 text-pencilGray">
+                    <span class="px-2 py-0.5 bg-inkBlack text-paperBg font-bold text-[10px] rounded">TIMELINE</span>
+                    <span>2025 — 2026</span>
+                    <span>•</span>
+                    <span class="text-inkBlack font-semibold">SENIOR HIGH GRADUATION YEAR</span>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <span class="rule-broken font-mono text-xs text-pencilGray hidden sm:inline">1-Page PDF CV</span>
+                    <span class="highlight font-mono font-bold text-inkBlack text-xs">HUMAN EDITORIAL CV v2.0</span>
+                </div>
+            </div>
+
+            <!-- Kinetic Editorial Title -->
+            <div class="mb-8">
+                <span class="font-mono text-xs font-bold uppercase tracking-widest text-ballpointBlue block mb-2">
+                    // CREATIVE ENGINEER & FULL-STACK DEVELOPER
+                </span>
+                <h1 class="font-serif font-normal text-6xl sm:text-8xl md:text-9xl tracking-tight leading-[0.88] text-inkBlack">
+                    Sebastián <br>
+                    <span class="italic font-serif text-inkBlack/90 pl-4 sm:pl-16">Alvarado.</span>
+                </h1>
+            </div>
+
+            <!-- Role & Quick Intro Banner -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- Main Statement -->
+                <div class="lg:col-span-8 bg-paperCard border border-inkBlack/20 p-6 sm:p-8 rounded-2xl shadow-paper relative">
+                    <div class="paper-tape absolute -top-3 left-10 w-28 h-6 transform -rotate-2"></div>
+                    
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-4 font-mono text-xs text-pencilGray border-b border-inkBlack/10 pb-3">
+                        <span class="font-bold text-inkBlack">ROLE: FULL-STACK DEVELOPER & SYSTEMS TINKERER</span>
+                        <span class="text-ballpointBlue font-hand text-lg">Age 15 • Medellín, Colombia</span>
+                    </div>
+
+                    <p class="font-sans text-xl sm:text-2xl text-inkBlack font-normal leading-snug mb-6">
+                        I am a <span class="highlight font-semibold">15-year-old creative software developer</span> from Medellín, Colombia. I build interactive web applications, software tools, sound engines, and hardware experiments—driven by an unyielding compulsion to explore <span class="highlight-blue font-semibold">everything that enters my life for the first time</span>.
+                    </p>
+
+                    <p class="font-sans text-sm sm:text-base text-pencilGray leading-relaxed mb-6">
+                        Instead of reading manual instructions, I prefer to dismantle code systems, write raw prototypes, and invent unconventional user experiences. Try hover-over or clicking <span class="redacted-text">the hidden handwritten secrets</span> throughout this page!
+                    </p>
+
+                    <div class="flex flex-wrap items-center gap-4 pt-4 border-t border-inkBlack/10 font-mono text-xs">
+                        <span class="flex items-center gap-1.5 text-inkBlack font-bold">
+                            <i class="fa-solid fa-graduation-cap text-ballpointBlue"></i> Senior High '26
+                        </span>
+                        <span class="text-pencilGray">•</span>
+                        <span class="flex items-center gap-1.5 text-inkBlack font-bold">
+                            <i class="fa-solid fa-code text-rebelRed"></i> Full-Stack & IoT
+                        </span>
+                        <span class="text-pencilGray">•</span>
+                        <span class="text-ballpointBlue font-hand text-lg">Curiosity > Rules</span>
+                    </div>
+                </div>
+
+                <!-- Interactive Sticky Desk Notes -->
+                <div class="lg:col-span-4 space-y-4">
+                    
+                    <!-- Draggable Note 1 -->
+                    <div id="sticky-1" class="sticky-paper bg-[#fff9c4] border border-black/15 p-5 rounded-xl shadow-paper transform rotate-2 relative">
+                        <div class="flex justify-between items-center mb-2 font-mono text-[10px] text-black/50">
+                            <span>STICKY NOTE #01</span>
+                            <i class="fa-solid fa-thumbtack text-rebelRed"></i>
+                        </div>
+                        <p class="font-hand text-xl text-inkBlack leading-snug">
+                            "I don't fit inside a standard corporate box. I fit inside a code editor where rules haven't been written yet."
+                        </p>
+                        <span class="font-mono text-[9px] text-pencilGray block mt-2">↳ Drag me around the desk!</span>
+                    </div>
+
+                    <!-- Draggable Note 2 -->
+                    <div id="sticky-2" class="sticky-paper bg-[#e1f5fe] border border-black/15 p-5 rounded-xl shadow-paper transform -rotate-3 relative">
+                        <div class="flex justify-between items-center mb-2 font-mono text-[10px] text-black/50">
+                            <span>STICKY NOTE #02</span>
+                            <i class="fa-solid fa-paperclip text-black/40"></i>
+                        </div>
+                        <p class="font-hand text-xl text-ballpointBlue leading-snug">
+                            "Current focus: Combining TDeA software logic with Medellín urban mobility concepts."
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <section id="about" class="space-y-10">
+            
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b-2 border-inkBlack pb-4 gap-2">
+                <div>
+                    <span class="font-mono text-xs text-pencilGray uppercase tracking-widest">// CHAPTER 01</span>
+                    <h2 class="font-serif text-4xl sm:text-5xl text-inkBlack">About Me — Who, What & Why</h2>
+                </div>
+                <span class="font-hand text-2xl text-ballpointBlue">"Learning by breaking down boundaries"</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                
+                <!-- Pillar 1: Who Am I -->
+                <div class="lg:col-span-4 bg-paperCard border border-inkBlack/20 p-6 sm:p-7 rounded-2xl shadow-paper flex flex-col justify-between hover:border-inkBlack transition">
+                    <div>
+                        <div class="w-10 h-10 rounded-full bg-highlighterYellow border border-inkBlack flex items-center justify-center font-mono font-bold text-inkBlack mb-4">
+                            01
+                        </div>
+                        <h3 class="font-serif text-3xl text-inkBlack mb-3">Who Am I?</h3>
+                        <p class="font-sans text-xs sm:text-sm text-pencilGray leading-relaxed mb-4">
+                            My name is <strong class="text-inkBlack">Sebastián Alvarado</strong>. I am 15 years old, living in the vibrant valley of <strong class="text-inkBlack">Medellín, Colombia</strong>. Currently finishing my senior year of high school (Class of 2026), I bridge the gap between young creative rebellion and structured technical engineering.
+                        </p>
+                        <p class="font-sans text-xs text-pencilGray leading-relaxed">
+                            I don't wait for permission or formal assignments to start building—when a question pops into my mind, I write code to solve it.
+                        </p>
+                    </div>
+                    <div class="font-hand text-xl text-ballpointBlue mt-6 pt-4 border-t border-inkBlack/10">
+                        ↳ Medellín Native • High School Senior
+                    </div>
+                </div>
+
+                <!-- Pillar 2: What I Do -->
+                <div class="lg:col-span-4 bg-paperCard border border-inkBlack/20 p-6 sm:p-7 rounded-2xl shadow-paper flex flex-col justify-between hover:border-inkBlack transition">
+                    <div>
+                        <div class="w-10 h-10 rounded-full bg-ballpointBlue text-white border border-inkBlack flex items-center justify-center font-mono font-bold mb-4">
+                            02
+                        </div>
+                        <h3 class="font-serif text-3xl text-inkBlack mb-3">What I Do?</h3>
+                        <p class="font-sans text-xs sm:text-sm text-pencilGray leading-relaxed mb-4">
+                            I develop custom web platforms, explore full-stack logic, program microcontrollers (IoT), and experiment with generative web graphics and sound synthesizers.
+                        </p>
+                        <ul class="font-mono text-xs text-inkBlack space-y-2 mb-4">
+                            <li class="flex items-center gap-2">
+                                <span class="text-rebelRed font-bold">➔</span> Modern JavaScript / Python logic
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-rebelRed font-bold">➔</span> Database management & REST APIs
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-rebelRed font-bold">➔</span> Microcontroller hardware & sensors
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="font-hand text-xl text-ballpointBlue mt-6 pt-4 border-t border-inkBlack/10">
+                        ↳ Systems, Code & Clay
+                    </div>
+                </div>
+
+                <!-- Pillar 3: What I Like (Interactive Novelty Spinner) -->
+                <div class="lg:col-span-4 bg-paperCard border border-inkBlack/20 p-6 sm:p-7 rounded-2xl shadow-paper flex flex-col justify-between relative overflow-hidden">
+                    <div class="paper-tape absolute -top-3 right-8 w-24 h-6 transform rotate-2"></div>
+                    
+                    <div>
+                        <div class="w-10 h-10 rounded-full bg-rebelRed text-white border border-inkBlack flex items-center justify-center font-mono font-bold mb-4">
+                            03
+                        </div>
+                        <h3 class="font-serif text-3xl text-inkBlack mb-2">What I Like?</h3>
+                        <p class="font-sans text-xs text-pencilGray mb-4">
+                            My core driver: <strong class="text-inkBlack">The Novelty Instinct</strong>. Whatever is new, unseen, or unfamiliar immediately becomes my hyper-fixation.
+                        </p>
+
+                        <!-- Interactive Novelty Wheel Display -->
+                        <div class="bg-paperBg border border-inkBlack/15 rounded-xl p-4 text-center space-y-3 shadow-inner">
+                            <div class="font-mono text-[10px] text-pencilGray uppercase tracking-wider">Interactive Obsession Radar</div>
+                            <div id="novelty-display-text" class="font-serif text-2xl text-inkBlack italic min-h-[3rem] flex items-center justify-center">
+                                "Unfamiliar Programming Languages"
+                            </div>
+                            <button onclick="spinNoveltyWheel()" class="w-full py-2 bg-inkBlack text-paperBg font-mono text-xs rounded hover:bg-ballpointBlue transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-arrows-rotate text-highlighterYellow"></i>
+                                <span>Discover Next Obsession</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="font-hand text-xl text-ballpointBlue mt-6 pt-4 border-t border-inkBlack/10">
+                        ↳ Constant evolution
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="experience" class="space-y-12">
+            
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b-2 border-inkBlack pb-4 gap-2">
+                <div>
+                    <span class="font-mono text-xs text-pencilGray uppercase tracking-widest">// CHAPTER 02</span>
+                    <h2 class="font-serif text-4xl sm:text-5xl text-inkBlack">Education & Experience</h2>
+                </div>
+                <p class="font-mono text-xs text-pencilGray">Academic & Practical Milestones (2025–2026)</p>
+            </div>
+
+            <!-- TDeA (Tecnológico de Antioquia) -->
+            <article class="bg-paperCard border border-inkBlack/20 rounded-2xl p-6 sm:p-8 shadow-paper relative transition hover:shadow-lift">
+                <div class="paper-tape absolute -top-3 left-12 w-32 h-6 transform -rotate-1"></div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    <div class="lg:col-span-8 space-y-4">
+                        <div class="flex flex-wrap items-center gap-3">
+                            <span class="font-mono text-xs px-3 py-1 bg-inkBlack text-paperBg rounded-full font-bold">ACADEMIC EXCELLENCE</span>
+                            <span class="font-mono text-xs text-pencilGray">TECNOLÓGICO DE ANTIOQUIA (TDeA)</span>
+                            <span class="font-mono text-xs text-ballpointBlue font-bold">2025 — 2026</span>
+                        </div>
+
+                        <h3 class="font-serif text-3xl sm:text-4xl text-inkBlack font-normal">
+                            TDeA Academic Software & Logic Works
+                        </h3>
+
+                        <p class="font-sans text-sm text-pencilGray leading-relaxed">
+                            Through specialized academic workshops and software development labs at <strong class="text-inkBlack">Tecnológico de Antioquia (TDeA)</strong>, I have expanded my foundational engineering knowledge in software logic, algorithm optimization, and relational data modeling.
+                        </p>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 font-sans text-xs pt-2">
+                            <div class="p-3 bg-paperBg border border-inkBlack/10 rounded-lg">
+                                <strong class="block text-inkBlack font-mono mb-1">➔ Logic & Algorithmic Design</strong>
+                                <p class="text-pencilGray text-[11px]">Building structured problem-solving pipelines and data flow structures.</p>
+                            </div>
+                            <div class="p-3 bg-paperBg border border-inkBlack/10 rounded-lg">
+                                <strong class="block text-inkBlack font-mono mb-1">➔ Software Architecture</strong>
+                                <p class="text-pencilGray text-[11px]">Hands-on practical development applying object-oriented & functional paradigms.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 font-mono text-[11px] pt-2">
+                            <span class="bg-inkBlack/5 px-2.5 py-1 rounded border border-inkBlack/10">Algorithm Logic</span>
+                            <span class="bg-inkBlack/5 px-2.5 py-1 rounded border border-inkBlack/10">System Engineering</span>
+                            <span class="bg-inkBlack/5 px-2.5 py-1 rounded border border-inkBlack/10">TDeA Workshops</span>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-4 bg-paperBg border border-inkBlack/15 rounded-xl p-5 text-center flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <i class="fa-solid fa-university text-3xl text-ballpointBlue"></i>
+                            <div class="font-serif text-xl italic text-inkBlack">TDeA Knowledge Hub</div>
+                            <p class="font-mono text-[10px] text-pencilGray">SOFTWARE LAB NOTES & COMPONENT TESTING</p>
+                        </div>
+                        <button onclick="openExperienceModal('tdea')" class="w-full py-2.5 bg-inkBlack text-paperBg font-mono text-xs rounded hover:bg-ballpointBlue transition">
+                            Inspect TDeA Work Notes ➔
+                        </button>
+                    </div>
+
+                </div>
+            </article>
+
+            <!-- Quipux Classes & Mobility Tech -->
+            <article class="bg-paperCard border border-inkBlack/20 rounded-2xl p-6 sm:p-8 shadow-paper relative transition hover:shadow-lift">
+                <div class="paper-tape absolute -top-3 right-12 w-32 h-6 transform rotate-2"></div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    <div class="lg:col-span-8 space-y-4">
+                        <div class="flex flex-wrap items-center gap-3">
+                            <span class="font-mono text-xs px-3 py-1 bg-ballpointBlue text-white rounded-full font-bold">TECH TRAINING</span>
+                            <span class="font-mono text-xs text-pencilGray">QUIPUX INNOVATION LABS</span>
+                            <span class="font-mono text-xs text-ballpointBlue font-bold">2025 — 2026</span>
+                        </div>
+
+                        <h3 class="font-serif text-3xl sm:text-4xl text-inkBlack font-normal">
+                            Quipux Systems & Software Architecture
+                        </h3>
+
+                        <p class="font-sans text-sm text-pencilGray leading-relaxed">
+                            Enrolled in specialized technical training and coding classes at <strong class="text-inkBlack">Quipux</strong> (leading enterprise in intelligent transit and smart city solutions). Focused on enterprise software architecture, data pipelines, backend logic, and real-time transit telemetry.
+                        </p>
+
+                        <!-- Interactive Traffic Signal Mini Simulator -->
+                        <div class="bg-paperBg border border-inkBlack/15 p-4 rounded-xl space-y-3">
+                            <div class="flex justify-between items-center font-mono text-[10px] text-pencilGray">
+                                <span>QUIPUX SMART TRAFFIC LOGIC SIMULATOR</span>
+                                <span id="traffic-status" class="text-emerald-600 font-bold">STATUS: GREEN (FLOW NORMAL)</span>
+                            </div>
+                            <div class="flex items-center justify-center gap-6 py-2">
+                                <div id="light-red" class="w-8 h-8 rounded-full bg-red-900 border border-black/40"></div>
+                                <div id="light-yellow" class="w-8 h-8 rounded-full bg-yellow-900 border border-black/40"></div>
+                                <div id="light-green" class="w-8 h-8 rounded-full bg-emerald-500 border border-black/40 shadow-[0_0_15px_#10b981]"></div>
+                            </div>
+                            <button onclick="cycleTrafficLight()" class="w-full py-1.5 bg-paperDarkCard border border-inkBlack/20 font-mono text-[11px] rounded hover:bg-inkBlack hover:text-white transition">
+                                Trigger Traffic Event (Test Quipux Logic)
+                            </button>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 font-mono text-[11px] pt-1">
+                            <span class="bg-inkBlack/5 px-2.5 py-1 rounded border border-inkBlack/10">Backend Systems</span>
+                            <span class="bg-inkBlack/5 px-2.5 py-1 rounded border border-inkBlack/10">Smart Mobility</span>
+                            <span class="bg-inkBlack/5 px-2.5 py-1 rounded border border-inkBlack/10">Quipux Training</span>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-4 bg-paperBg border border-inkBlack/15 rounded-xl p-5 text-center flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <i class="fa-solid fa-traffic-light text-3xl text-rebelRed"></i>
+                            <div class="font-serif text-xl italic text-inkBlack">Quipux Systems Lab</div>
+                            <p class="font-mono text-[10px] text-pencilGray">ENTERPRISE CODE ARCHITECTURE</p>
+                        </div>
+                        <button onclick="openExperienceModal('quipux')" class="w-full py-2.5 bg-inkBlack text-paperBg font-mono text-xs rounded hover:bg-ballpointBlue transition">
+                            Inspect Quipux Syllabus ➔
+                        </button>
+                    </div>
+
+                </div>
+            </article>
+
+            <!-- Secretaría de Educación de Medellín Projects -->
+            <article class="bg-paperCard border border-inkBlack/20 rounded-2xl p-6 sm:p-8 shadow-paper relative transition hover:shadow-lift">
+                <div class="paper-tape absolute -top-3 left-1/3 w-32 h-6"></div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    <div class="lg:col-span-8 space-y-4">
+                        <div class="flex flex-wrap items-center gap-3">
+                            <span class="font-mono text-xs px-3 py-1 bg-highlighterYellow text-inkBlack rounded-full font-bold">MUNICIPAL INNOVATION</span>
+                            <span class="font-mono text-xs text-pencilGray">SECRETARÍA DE EDUCACIÓN DE MEDELLÍN</span>
+                            <span class="font-mono text-xs text-ballpointBlue font-bold">2025 — 2026</span>
+                        </div>
+
+                        <h3 class="font-serif text-3xl sm:text-4xl text-inkBlack font-normal">
+                            Secretaría de Educación Youth Tech Initiatives
+                        </h3>
+
+                        <p class="font-sans text-sm text-pencilGray leading-relaxed">
+                            Active participant and developer in municipal technology initiatives sponsored by the <strong class="text-inkBlack">Secretaría de Educación de Medellín</strong>. Contributing to student tech leadership, STEM challenges, and web prototypes designed to empower Medellín's public educational ecosystem.
+                        </p>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 font-sans text-xs">
+                            <div class="p-3 bg-paperBg border border-inkBlack/10 rounded-lg">
+                                <strong class="block text-inkBlack font-mono mb-1">➔ STEM & Youth Innovation</strong>
+                                <p class="text-pencilGray text-[11px]">Developing interactive tools and educational software for Medellín schools.</p>
+                            </div>
+                            <div class="p-3 bg-paperBg border border-inkBlack/10 rounded-lg">
+                                <strong class="block text-inkBlack font-mono mb-1">➔ Senior High Science Fair</strong>
+                                <p class="text-pencilGray text-[11px]">Leading IoT soil sensor project representing local youth science.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 font-mono text-[11px] pt-1">
+                            <span class="bg-inkBlack/5 px-2.5 py-1 rounded border border-inkBlack/10">Medellín Education</span>
+                            <span class="bg-inkBlack/5 px-2.5 py-1 rounded border border-inkBlack/10">STEM Leadership</span>
+                            <span class="bg-inkBlack/5 px-2.5 py-1 rounded border border-inkBlack/10">Youth Hackathons</span>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-4 bg-paperBg border border-inkBlack/15 rounded-xl p-5 text-center flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <i class="fa-solid fa-award text-3xl text-highlighterYellow"></i>
+                            <div class="font-serif text-xl italic text-inkBlack">Municipal Tech Network</div>
+                            <p class="font-mono text-[10px] text-pencilGray">SECRETARÍA DE EDUCACIÓN PRODUCER</p>
+                        </div>
+                        <button onclick="openExperienceModal('secretaria')" class="w-full py-2.5 bg-inkBlack text-paperBg font-mono text-xs rounded hover:bg-ballpointBlue transition">
+                            Inspect Educational Projects ➔
+                        </button>
+                    </div>
+
+                </div>
+            </article>
+
+        </section>
+
+        <section id="skills" class="space-y-10">
+            
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b-2 border-inkBlack pb-4 gap-2">
+                <div>
+                    <span class="font-mono text-xs text-pencilGray uppercase tracking-widest">// CHAPTER 03</span>
+                    <h2 class="font-serif text-4xl sm:text-5xl text-inkBlack">Skills & Toolkit Cabinet</h2>
+                </div>
+                <span class="font-hand text-2xl text-ballpointBlue">"Tools I turn into working code"</span>
+            </div>
+
+            <!-- Skills Grid Matrix -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Category 1: Software & Web Development -->
+                <div class="bg-paperCard border border-inkBlack/20 p-6 rounded-2xl shadow-paper flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b border-inkBlack/10 pb-2">
+                            <span class="font-mono text-xs font-bold text-inkBlack">CORE CODING</span>
+                            <i class="fa-solid fa-code text-ballpointBlue"></i>
+                        </div>
+                        
+                        <div class="space-y-2 font-mono text-xs">
+                            <div class="p-2.5 bg-paperBg border border-inkBlack/10 rounded flex justify-between items-center">
+                                <span>JavaScript (ES6+)</span>
+                                <span class="text-ballpointBlue font-bold">Advanced</span>
+                            </div>
+                            <div class="p-2.5 bg-paperBg border border-inkBlack/10 rounded flex justify-between items-center">
+                                <span>HTML5 / Tailwind</span>
+                                <span class="text-ballpointBlue font-bold">Expert</span>
+                            </div>
+                            <div class="p-2.5 bg-paperBg border border-inkBlack/10 rounded flex justify-between items-center">
+                                <span>Python</span>
+                                <span class="text-pencilGray">Intermediate</span>
+                            </div>
+                            <div class="p-2.5 bg-paperBg border border-inkBlack/10 rounded flex justify-between items-center">
+                                <span>REST APIs & JSON</span>
+                                <span class="text-ballpointBlue font-bold">Proficient</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="font-hand text-lg text-pencilGray mt-4 pt-2 border-t border-inkBlack/10">
+                        ↳ Clean, self-taught syntax
+                    </div>
+                </div>
+
+                <!-- Category 2: Hardware & IoT -->
+                <div class="bg-paperCard border border-inkBlack/20 p-6 rounded-2xl shadow-paper flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b border-inkBlack/10 pb-2">
+                            <span class="font-mono text-xs font-bold text-inkBlack">HARDWARE & IOT</span>
+                            <i class="fa-solid fa-microchip text-rebelRed"></i>
+                        </div>
+                        
+                        <div class="space-y-2 font-mono text-xs">
+                            <div class="p-2.5 bg-paperBg border border-inkBlack/10 rounded flex justify-between items-center">
+                                <span>ESP32 Microcontrollers</span>
+                                <span class="text-rebelRed font-bold">Active</span>
+                            </div>
+                            <div class="p-2.5 bg-paperBg border border-inkBlack/10 rounded flex justify-between items-center">
+                                <span>C++ / Embedded Wiring</span>
+                                <span class="text-pencilGray">Intermediate</span>
+                            </div>
+                            <div class="p-2.5 bg-paperBg border border-inkBlack/10 rounded flex justify-between items-center">
+                                <span>Soil & Weather Sensors</span>
+                                <span class="text-rebelRed font-bold">Tested</span>
+                            </div>
+                            <div class="p-2.5 bg-paperBg border border-inkBlack/10 rounded flex justify-between items-center">
+                                <span>Serial Data Stream</span>
+                                <span class="text-pencilGray">Proficient</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="font-hand text-lg text-pencilGray mt-4 pt-2 border-t border-inkBlack/10">
+                        ↳ Medellín physical tinkering
+                    </div>
+                </div>
+
+                <!-- Category 3: Design & Media -->
+                <div class="bg-paperCard border border-inkBlack/20 p-6 rounded-2xl shadow-paper flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b border-inkBlack/10 pb-2">
+                            <span class="font-mono text-xs font-bold text-inkBlack">CREATIVE UI & AUDIO</span>
+                            <i class="fa-solid fa-wand-magic-sparkles text-highlighterYellow"></i>
+                        </div>
+                        
+                        <div class="space-y-2 font-mono text-xs">
+                            <div class="p-2.5 bg-paperBg border border-inkBlack/10 rounded flex justify-between items-center">
+                                <span>Unruled UI / UX</span>
+                                <span class="text-black font-bold">Native</span>
+                            </div>
+                            <div class="p-2.5 bg-paperBg border border-inkBlack/10 rounded flex justify-between items-center">
+                                <span>Web Audio Synthesis</span>
+                                <span class="text-ballpointBlue font-bold">Proficient</span>
+                            </div>
+                            <div class="p-2.5 bg-paperBg border border-inkBlack/10 rounded flex justify-between items-center">
+                                <span>HTML5 Canvas Art</span>
+                                <span class="text-ballpointBlue font-bold">Advanced</span>
+                            </div>
+                            <div class="p-2.5 bg-paperBg border border-inkBlack/10 rounded flex justify-between items-center">
+                                <span>Figma Wireframing</span>
+                                <span class="text-pencilGray">Capable</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="font-hand text-lg text-pencilGray mt-4 pt-2 border-t border-inkBlack/10">
+                        ↳ Anti-template aesthetics
+                    </div>
+                </div>
+
+                <!-- Category 4: Mindset & Agility -->
+                <div class="bg-paperCard border border-inkBlack/20 p-6 rounded-2xl shadow-paper flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b border-inkBlack/10 pb-2">
+                            <span class="font-mono text-xs font-bold text-inkBlack">REBEL MINDSET</span>
+                            <i class="fa-solid fa-lightbulb text-emerald-600"></i>
+                        </div>
+                        
+                        <div class="space-y-2 font-mono text-xs">
+                            <div class="p-2.5 bg-paperBg border border-inkBlack/10 rounded flex justify-between items-center">
+                                <span>Rapid Prototyping</span>
+                                <span class="text-emerald-700 font-bold">Obsessive</span>
+                            </div>
+                            <div class="p-2.5 bg-paperBg border border-inkBlack/10 rounded flex justify-between items-center">
+                                <span>Novelty Adaptability</span>
+                                <span class="text-emerald-700 font-bold">High Speed</span>
+                            </div>
+                            <div class="p-2.5 bg-paperBg border border-inkBlack/10 rounded flex justify-between items-center">
+                                <span>Autonomous Learning</span>
+                                <span class="text-emerald-700 font-bold">100% Driven</span>
+                            </div>
+                            <div class="p-2.5 bg-paperBg border border-inkBlack/10 rounded flex justify-between items-center">
+                                <span>Senior Class '26</span>
+                                <span class="text-inkBlack">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="font-hand text-lg text-pencilGray mt-4 pt-2 border-t border-inkBlack/10">
+                        ↳ Rules are clay to reshape
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="contact" class="bg-paperCard border border-inkBlack/20 p-6 sm:p-12 rounded-3xl shadow-lift relative overflow-hidden">
+            <div class="paper-tape absolute -top-3 left-1/2 transform -translate-x-1/2 w-40 h-6"></div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="font-mono text-xs text-pencilGray uppercase tracking-widest">// CHAPTER 04 / CONTACT STATION</span>
+                    <h2 class="font-serif text-4xl sm:text-5xl text-inkBlack">
+                        Send a Digital Transmission.
+                    </h2>
+                    <p class="font-sans text-sm text-pencilGray leading-relaxed">
+                        Whether you are an engineer, mentor, recruiter, student, or fellow novelty seeker—reach out to collaborate, ask questions, or exchange unruled ideas.
+                    </p>
+
+                    <!-- Direct Email Copy Block -->
+                    <div class="p-4 bg-paperBg border border-inkBlack/15 rounded-xl space-y-2">
+                        <span class="font-mono text-[10px] text-pencilGray block">DIRECT TRANSMISSION ADDRESS</span>
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="font-mono text-xs font-bold text-inkBlack truncate" id="email-address">sebastian.alvarado@example.com</span>
+                            <button onclick="copyEmailToClipboard()" class="px-3 py-1.5 bg-inkBlack text-paperBg font-mono text-[10px] rounded hover:bg-ballpointBlue transition whitespace-nowrap">
+                                Copy Email 📋
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Medellín Location Note -->
+                    <div class="font-hand text-2xl text-ballpointBlue">
+                        📍 Based in Medellín, Colombia <br>
+                        &nbsp;&nbsp;&nbsp;Available for remote & local projects!
+                    </div>
+                </div>
+
+                <!-- Interactive Postcard Form -->
+                <form onsubmit="handlePostcardSubmit(event)" class="lg:col-span-7 bg-paperBg border border-inkBlack/20 p-6 sm:p-8 rounded-2xl space-y-5 shadow-paper relative">
+                    
+                    <!-- Perforated Stamp Selection -->
+                    <div class="flex items-center justify-between border-b border-inkBlack/10 pb-4">
+                        <div>
+                            <span class="font-serif text-2xl text-inkBlack">Postcard to Medellín</span>
+                            <span class="block font-mono text-[10px] text-pencilGray">SELECT YOUR POSTAGE STAMP</span>
+                        </div>
+                        
+                        <div class="flex gap-2">
+                            <button type="button" onclick="selectStamp(this, 'Medellín Metro')" class="postage-stamp px-2 py-1 font-mono text-[9px] rounded bg-highlighterYellow/40 hover:bg-highlighterYellow transition border-black/30">
+                                🇨🇴 Medellín '26
+                            </button>
+                            <button type="button" onclick="selectStamp(this, 'Creative Code')" class="postage-stamp px-2 py-1 font-mono text-[9px] rounded bg-ballpointBlue/20 hover:bg-ballpointBlue hover:text-white transition border-black/30">
+                                💻 Code Stamp
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-mono text-[10px] text-pencilGray mb-1">SENDER NAME / ALIAS</label>
+                        <input type="text" required placeholder="Your name or organization..." class="w-full px-3.5 py-2.5 bg-paperCard border border-inkBlack/15 rounded-lg font-sans text-xs text-inkBlack focus:outline-none focus:border-inkBlack">
+                    </div>
+
+                    <div>
+                        <label class="block font-mono text-[10px] text-pencilGray mb-1">YOUR EMAIL ADDRESS</label>
+                        <input type="email" required placeholder="how-to-reply@domain.com" class="w-full px-3.5 py-2.5 bg-paperCard border border-inkBlack/15 rounded-lg font-sans text-xs text-inkBlack focus:outline-none focus:border-inkBlack">
+                    </div>
+
+                    <div>
+                        <label class="block font-mono text-[10px] text-pencilGray mb-1">TRANSMISSION MESSAGE / IDEA</label>
+                        <textarea required rows="3" placeholder="Write your message, feedback, or proposed project here..." class="w-full px-3.5 py-2.5 bg-paperCard border border-inkBlack/15 rounded-lg font-sans text-xs text-inkBlack focus:outline-none focus:border-inkBlack"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 bg-inkBlack text-paperBg font-mono text-xs font-bold rounded-lg hover:bg-ballpointBlue transition flex items-center justify-center gap-2 shadow-paper">
+                        <span>TRANSMIT POSTCARD TO SEBASTIÁN</span>
+                        <i class="fa-solid fa-paper-plane text-[10px] text-highlighterYellow"></i>
+                    </button>
+                </form>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-inkBlack/15 py-10 text-center font-mono text-xs text-pencilGray space-y-2">
+        <p class="font-bold text-inkBlack">SEBASTIÁN ALVARADO • MEDELLÍN, COLOMBIA • CLASS OF 2026</p>
+        <p class="font-hand text-xl text-ballpointBlue">"Unruled ideas, clean software, and endless curiosity."</p>
+    </footer>
+
+    <!-- Universal Experience / Details Modal -->
+    <div id="modal" class="fixed inset-0 z-50 bg-inkBlack/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-paperBg border-2 border-inkBlack max-w-lg w-full rounded-2xl p-6 sm:p-8 shadow-lift relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-inkBlack font-mono font-bold hover:text-ballpointBlue text-lg">✕</button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <script>
+        // Freehand Doodle Engine
+        const canvas = document.getElementById('doodle-canvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawingMode = false;
+        let isPainting = false;
+        let brushColor = '#ffe600';
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function toggleDoodleMode() {
+            isDrawingMode = !isDrawingMode;
+            const btnText = document.getElementById('draw-btn-text');
+            const palette = document.getElementById('draw-palette');
+            const btn = document.getElementById('draw-toggle-btn');
+
+            if (isDrawingMode) {
+                canvas.classList.add('active');
+                btnText.textContent = "Exit Scribble";
+                palette.classList.remove('hidden');
+                btn.classList.add('bg-ballpointBlue');
+            } else {
+                canvas.classList.remove('active');
+                btnText.textContent = "Draw / Scribble";
+                palette.classList.add('hidden');
+                btn.classList.remove('bg-ballpointBlue');
+            }
+            playAcousticTone(440);
+        }
+
+        function setBrushColor(color) {
+            brushColor = color;
+            playAcousticTone(523.25);
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            playAcousticTone(280);
+        }
+
+        function startDrawing(e) {
+            if (!isDrawingMode) return;
+            isPainting = true;
+            draw(e);
+        }
+
+        function stopDrawing() {
+            isPainting = false;
+            ctx.beginPath();
+        }
+
+        function draw(e) {
+            if (!isPainting || !isDrawingMode) return;
+
+            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+            if (brushColor === 'eraser') {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.lineWidth = 30;
+            } else {
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.lineWidth = brushColor === '#ffe600' ? 20 : 3;
+                ctx.lineCap = 'round';
+                ctx.strokeStyle = brushColor;
+                ctx.globalAlpha = brushColor === '#ffe600' ? 0.45 : 0.9;
+            }
+
+            ctx.lineTo(clientX, clientY);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(clientX, clientY);
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mousemove', draw);
+
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchend', stopDrawing);
+        canvas.addEventListener('touchmove', draw);
+
+        // Redaction X-Ray Lens Toggle
+        let showRedactions = false;
+        function toggleRedactionMode() {
+            showRedactions = !showRedactions;
+            document.body.classList.toggle('show-redactions', showRedactions);
+            const redactBtn = document.getElementById('redact-btn');
+            redactBtn.classList.toggle('bg-ballpointBlue', showRedactions);
+            redactBtn.classList.toggle('text-white', showRedactions);
+            playAcousticTone(showRedactions ? 600 : 320);
+        }
+
+        // Draggable Sticky Notes
+        document.querySelectorAll('.sticky-paper').forEach(sticky => {
+            let isDragging = false;
+            let startX, startY, origX = 0, origY = 0;
+
+            sticky.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.clientX - origX;
+                startY = e.clientY - origY;
+                playAcousticTone(380);
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                origX = e.clientX - startX;
+                origY = e.clientY - startY;
+                sticky.style.transform = `translate(${origX}px, ${origY}px) rotate(0deg)`;
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                }
+            });
+        });
+
+        // Web Audio Synthesizer Feedback
+        let audioCtx = null;
+        let soundEnabled = false;
+
+        function toggleAcousticAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('audio-icon');
+
+            if (soundEnabled) {
+                audioCtx.resume();
+                icon.className = 'fa-solid fa-volume-high text-ballpointBlue';
+                playAcousticTone(587.33);
+            } else {
+                icon.className = 'fa-solid fa-volume-xmark';
+            }
+        }
+
+        function playAcousticTone(freq) {
+            if (!soundEnabled || !audioCtx) return;
+
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.25);
+            } catch (err) {
+                console.log("Audio play error", err);
+            }
+        }
+
+        // Novelty Radar Spinner
+        const obsessions = [
+            '"Unfamiliar Programming Languages"',
+            '"Web Audio & Generative Synths"',
+            '"ESP32 Microcontroller Soil Sensors"',
+            '"Medellín City Transit Telemetry"',
+            '"Unruled Tactile Web Design"',
+            '"Relational DB Logic & Queries"'
+        ];
+        let currentObsessionIndex = 0;
+
+        function spinNoveltyWheel() {
+            currentObsessionIndex = (currentObsessionIndex + 1) % obsessions.length;
+            const display = document.getElementById('novelty-display-text');
+            display.style.opacity = '0';
+            playAcousticTone(520 + currentObsessionIndex * 40);
+
+            setTimeout(() => {
+                display.textContent = obsessions[currentObsessionIndex];
+                display.style.opacity = '1';
+            }, 150);
+        }
+
+        // Quipux Traffic Light Simulator
+        let trafficState = 0; // 0 Green, 1 Yellow, 2 Red
+        function cycleTrafficLight() {
+            trafficState = (trafficState + 1) % 3;
+            const red = document.getElementById('light-red');
+            const yellow = document.getElementById('light-yellow');
+            const green = document.getElementById('light-green');
+            const status = document.getElementById('traffic-status');
+
+            red.className = "w-8 h-8 rounded-full bg-red-900 border border-black/40";
+            yellow.className = "w-8 h-8 rounded-full bg-yellow-900 border border-black/40";
+            green.className = "w-8 h-8 rounded-full bg-emerald-900 border border-black/40";
+
+            if (trafficState === 0) {
+                green.className = "w-8 h-8 rounded-full bg-emerald-500 border border-black/40 shadow-[0_0_15px_#10b981]";
+                status.textContent = "STATUS: GREEN (FLOW NORMAL)";
+                status.className = "text-emerald-600 font-bold";
+                playAcousticTone(650);
+            } else if (trafficState === 1) {
+                yellow.className = "w-8 h-8 rounded-full bg-amber-400 border border-black/40 shadow-[0_0_15px_#f59e0b]";
+                status.textContent = "STATUS: YELLOW (CAUTION CHANGE)";
+                status.className = "text-amber-600 font-bold";
+                playAcousticTone(480);
+            } else {
+                red.className = "w-8 h-8 rounded-full bg-red-600 border border-black/40 shadow-[0_0_15px_#ef4444]";
+                status.textContent = "STATUS: RED (PRIORITY STOP)";
+                status.className = "text-red-600 font-bold";
+                playAcousticTone(300);
+            }
+        }
+
+        // Modal content details for Experience
+        const experienceDetails = {
+            tdea: {
+                title: "TDeA (Tecnológico de Antioquia)",
+                tag: "ACADEMIC SOFTWARE & LOGIC LABS",
+                desc: "Workshops and software coursework at Tecnológico de Antioquia. Focused on logic structures, algorithm design, system efficiency, and building clean web software applications during high school."
+            },
+            quipux: {
+                title: "Quipux Training & Smart City Systems",
+                tag: "ENTERPRISE ARCHITECTURE & MOBILITY",
+                desc: "Technical learning classes with Quipux. Exploring software design patterns, backend logic, smart traffic light telemetry, database queries, and city-scale transit architecture."
+            },
+            secretaria: {
+                title: "Secretaría de Educación de Medellín",
+                tag: "MUNICIPAL YOUTH TECH INITIATIVES",
+                desc: "Participating in youth technology challenges and STEM showcases organized by the Secretaría de Educación de Medellín, promoting student-led innovation and local technology projects."
+            }
+        };
+
+        function openExperienceModal(key) {
+            const data = experienceDetails[key];
+            if (!data) return;
+
+            const modalContent = document.getElementById('modal-content');
+            modalContent.innerHTML = `
+                <span class="font-mono text-[10px] text-pencilGray uppercase tracking-widest">${data.tag}</span>
+                <h3 class="font-serif text-3xl text-inkBlack my-2">${data.title}</h3>
+                <p class="font-sans text-xs text-pencilGray leading-relaxed mb-6">${data.desc}</p>
+                <div class="flex justify-between items-center border-t border-inkBlack/10 pt-4">
+                    <span class="font-hand text-lg text-ballpointBlue">Medellín • Class of 2026</span>
+                    <button onclick="closeModal()" class="px-4 py-1.5 bg-inkBlack text-paperBg font-mono text-xs rounded hover:bg-ballpointBlue transition">Close Inspector</button>
+                </div>
+            `;
+            document.getElementById('modal').classList.remove('hidden');
+            playAcousticTone(500);
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+        }
+
+        // Postage Stamp Selection
+        let selectedStampName = "Medellín Metro";
+        function selectStamp(btn, stampName) {
+            selectedStampName = stampName;
+            playAcousticTone(620);
+            document.querySelectorAll('.postage-stamp').forEach(s => s.classList.remove('ring-2', 'ring-ballpointBlue'));
+            btn.classList.add('ring-2', 'ring-ballpointBlue');
+        }
+
+        // Copy Email logic
+        function copyEmailToClipboard() {
+            const email = document.getElementById('email-address').textContent;
+            document.execCommand('copy');
+            playAcousticTone(700);
+            const btn = event.target;
+            const original = btn.textContent;
+            btn.textContent = "COPIED! 📋";
+            setTimeout(() => btn.textContent = original, 2000);
+        }
+
+        // Postcard Submission logic
+        function handlePostcardSubmit(e) {
+            e.preventDefault();
+            playAcousticTone(750);
+            alert(`Postcard stamped (${selectedStampName}) and transmitted! Sebastián will receive your message soon.`);
+            e.target.reset();
+        }
+    </script>
+</body>
+</html>

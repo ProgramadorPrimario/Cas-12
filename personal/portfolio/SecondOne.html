@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEBASTIÁN ALVARADO — Human Editorial CV</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Instrument Serif, Caveat (Handwriting), Space Mono, Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Instrument Serif', 'serif'],
+                        hand: ['Caveat', 'cursive'],
+                        mono: ['Space Mono', 'monospace'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        paperBg: '#f6f4ee',
+                        paperCard: '#f0ede4',
+                        inkBlack: '#121212',
+                        pencilGray: '#555555',
+                        ballpointBlue: '#0038ff',
+                        highlighterYellow: '#ffe600',
+                        tapeBeige: '#e3dcbe',
+                        stainBrown: 'rgba(180, 140, 90, 0.12)',
+                    },
+                    boxShadow: {
+                        'paper': '2px 4px 15px rgba(0, 0, 0, 0.05)',
+                        'lift': '0 12px 30px -10px rgba(0, 0, 0, 0.12)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Tactile Paper Texture and Custom Selection */
+        body {
+            background-color: #f6f4ee;
+            color: #121212;
+            background-image: radial-gradient(#d5cfbf 0.75px, transparent 0.75px);
+            background-size: 24px 24px;
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background: #ffe600;
+            color: #000;
+        }
+
+        /* Handwritten Highlighter Effect */
+        .highlight {
+            background: linear-gradient(104deg, rgba(255, 230, 0, 0) 0.9%, rgba(255, 230, 0, 0.85) 2.4%, rgba(255, 230, 0, 0.7) 92.6%, rgba(255, 230, 0, 0) 99.1%);
+            border-radius: 0.3em 0.1em 0.4em 0.2em;
+            padding: 0.1em 0.3em;
+        }
+
+        .highlight-blue {
+            background: linear-gradient(104deg, rgba(0, 56, 255, 0) 0.9%, rgba(0, 56, 255, 0.15) 2.4%, rgba(0, 56, 255, 0.18) 92.6%, rgba(0, 56, 255, 0) 99.1%);
+            border-radius: 0.3em;
+            padding: 0.1em 0.3em;
+        }
+
+        /* Paper Tape Simulation */
+        .paper-tape {
+            background: rgba(235, 225, 200, 0.75);
+            backdrop-filter: blur(2px);
+            border-left: 2px dashed rgba(0, 0, 0, 0.08);
+            border-right: 2px dashed rgba(0, 0, 0, 0.08);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        /* Handwritten Scribble Margin Notes */
+        .handwritten-note {
+            font-family: 'Caveat', cursive;
+            color: #0038ff;
+            line-height: 1.1;
+        }
+
+        /* Strikethrough effect for "conventional rules" */
+        .rule-broken {
+            text-decoration: line-through;
+            text-decoration-color: #ff3b30;
+            text-decoration-thickness: 2px;
+            opacity: 0.55;
+        }
+
+        /* Freehand Canvas Overlay */
+        #doodle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 40;
+            pointer-events: none;
+        }
+        #doodle-canvas.active {
+            pointer-events: auto;
+            cursor: crosshair;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f6f4ee;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #121212;
+            border-radius: 3px;
+        }
+
+        .sticky-paper {
+            cursor: grab;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .sticky-paper:active {
+            cursor: grabbing;
+            transform: scale(1.03) rotate(0deg) !important;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-inkBlack leading-relaxed select-none sm:select-auto">
+
+    <canvas id="doodle-canvas"></canvas>
+
+    <header class="fixed top-4 left-0 right-0 z-50 px-4 md:px-12 pointer-events-none">
+        <div class="max-w-6xl mx-auto flex items-center justify-between pointer-events-auto">
+            
+            <!-- Left Header: Human Signature Badge -->
+            <div class="bg-paperCard border border-inkBlack/15 px-4 py-2 rounded-full shadow-paper flex items-center gap-3">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="font-mono text-xs font-bold tracking-tight text-inkBlack">SEBASTIÁN ALVARADO</span>
+                <span class="font-hand text-lg text-ballpointBlue hidden sm:inline">- Medellín 🇨🇴</span>
+            </div>
+
+            <!-- Right Header: Drawing Tools & Audio Switch -->
+            <div class="bg-paperCard border border-inkBlack/15 rounded-full px-3 py-1.5 shadow-paper flex items-center gap-2">
+                <!-- Toggle Freehand Annotations -->
+                <button id="draw-toggle-btn" onclick="toggleDoodleMode()" class="px-3 py-1 rounded-full font-mono text-xs font-semibold bg-inkBlack text-paperBg transition hover:opacity-80 flex items-center gap-1.5" title="Draw/Highlight over page">
+                    <i class="fa-solid fa-pen-nib text-highlighterYellow"></i>
+                    <span id="draw-btn-text" class="hidden sm:inline">Draw / Annotate</span>
+                </button>
+
+                <!-- Color Selector for Drawing -->
+                <div id="draw-palette" class="hidden flex items-center gap-1.5 px-2">
+                    <button onclick="setBrushColor('#ffe600')" class="w-4 h-4 rounded-full bg-highlighterYellow border border-black/20" title="Highlighter"></button>
+                    <button onclick="setBrushColor('#0038ff')" class="w-4 h-4 rounded-full bg-ballpointBlue border border-black/20" title="Ballpoint Blue"></button>
+                    <button onclick="setBrushColor('#ff3b30')" class="w-4 h-4 rounded-full bg-red-500 border border-black/20" title="Red Pencil"></button>
+                    <button onclick="clearCanvas()" class="text-[10px] font-mono text-pencilGray hover:text-inkBlack ml-1" title="Clear Canvas">Clear</button>
+                </div>
+
+                <div class="w-px h-4 bg-inkBlack/20 mx-1"></div>
+
+                <!-- Acoustic Audio Feedback -->
+                <button onclick="toggleAcousticAudio()" id="audio-btn" class="w-8 h-8 rounded-full border border-inkBlack/20 flex items-center justify-center hover:bg-inkBlack/5 text-inkBlack text-xs transition" title="Toggle Tactile Sound FX">
+                    <i id="audio-icon" class="fa-solid fa-volume-xmark"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative pt-28 pb-32 px-4 md:px-12 max-w-6xl mx-auto space-y-24">
+
+        <section class="relative pt-8 pb-12">
+            <!-- Simulated Coffee Ring Stain -->
+            <div class="absolute -top-10 right-4 w-48 h-48 rounded-full border-[12px] border-stainBrown pointer-events-none opacity-40 blur-[1px]"></div>
+            
+            <!-- Handwritten Margin Callout -->
+            <div class="absolute top-0 left-2 md:-left-8 transform -rotate-6 font-hand text-2xl text-ballpointBlue hidden lg:block">
+                ↳ "CVs are usually boring.<br>&nbsp;&nbsp;&nbsp;This one is living."
+            </div>
+
+            <!-- Strikethrough Corporate Anti-Rules -->
+            <div class="flex flex-wrap items-center gap-3 mb-6 font-mono text-xs text-pencilGray">
+                <span class="rule-broken">1-Page PDF Resume</span>
+                <span>/</span>
+                <span class="rule-broken">Corporate Buzzwords</span>
+                <span>/</span>
+                <span class="highlight font-bold text-inkBlack">HUMAN MANIFESTO v2026</span>
+            </div>
+
+            <!-- Kinetic Editorial Title -->
+            <h1 class="font-serif font-normal text-6xl sm:text-8xl md:text-9xl tracking-tight leading-[0.9] text-inkBlack mb-8">
+                Sebastián <br>
+                <span class="italic font-serif text-inkBlack/90 pl-4 sm:pl-12">Alvarado.</span>
+            </h1>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                
+                <!-- Main Narrative Bio -->
+                <div class="md:col-span-8 bg-paperCard border border-inkBlack/15 p-8 rounded-2xl shadow-paper relative">
+                    <div class="paper-tape absolute -top-3 left-10 w-24 h-6 transform -rotate-2"></div>
+                    
+                    <p class="font-sans text-xl md:text-2xl text-inkBlack font-normal leading-relaxed mb-6">
+                        I am a <span class="highlight font-semibold">15-year-old creative and developer</span> living in Medellín, Colombia. I am currently finishing my last year of school and obsessively exploring whatever is <span class="highlight-blue font-semibold">brand new</span> in my life.
+                    </p>
+
+                    <p class="font-sans text-sm md:text-base text-pencilGray leading-relaxed mb-6">
+                        I don't follow pre-made guidelines or standard templates. Every project I create—whether it's web software, sound engines, or physical science setups—is an attempt to learn by breaking things open and building them differently.
+                    </p>
+
+                    <div class="flex flex-wrap items-center gap-4 pt-4 border-t border-inkBlack/10 font-mono text-xs">
+                        <span class="flex items-center gap-1.5 text-inkBlack font-bold">
+                            <i class="fa-solid fa-location-dot text-red-500"></i> Medellín, Colombia
+                        </span>
+                        <span class="text-pencilGray">•</span>
+                        <span class="text-pencilGray">Class of 2026 (Senior High)</span>
+                        <span class="text-pencilGray">•</span>
+                        <span class="text-ballpointBlue font-hand text-lg">Curiosity > Rules</span>
+                    </div>
+                </div>
+
+                <!-- Interactive Drag-and-Drop Notes Desk -->
+                <div class="md:col-span-4 space-y-4">
+                    
+                    <!-- Sticky Note 1 -->
+                    <div id="sticky-1" class="sticky-paper bg-[#fff9c4] border border-black/10 p-5 rounded-lg shadow-paper transform rotate-2 relative" style="transform: rotate(2deg);">
+                        <div class="flex justify-between items-center mb-2 font-mono text-[10px] text-black/50">
+                            <span>NOTE #01</span>
+                            <i class="fa-solid fa-thumbtack text-red-500"></i>
+                        </div>
+                        <p class="font-hand text-xl text-inkBlack leading-snug">
+                            "When something new enters my world, I have to dismantle it and turn it into art."
+                        </p>
+                    </div>
+
+                    <!-- Sticky Note 2 -->
+                    <div id="sticky-2" class="sticky-paper bg-[#e1f5fe] border border-black/10 p-5 rounded-lg shadow-paper transform -rotate-3 relative" style="transform: rotate(-3deg);">
+                        <div class="flex justify-between items-center mb-2 font-mono text-[10px] text-black/50">
+                            <span>NOTE #02</span>
+                            <i class="fa-solid fa-paperclip text-black/40"></i>
+                        </div>
+                        <p class="font-hand text-xl text-ballpointBlue leading-snug">
+                            "Senior year goal: Build 10 novel experiments before graduation."
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <section class="space-y-8">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b-2 border-inkBlack pb-4">
+                <div>
+                    <span class="font-mono text-xs text-pencilGray uppercase tracking-widest">CHAPTER 01</span>
+                    <h2 class="font-serif text-4xl sm:text-5xl text-inkBlack">How I Operating (My Anti-Rules)</h2>
+                </div>
+                <span class="font-hand text-2xl text-ballpointBlue mt-2 sm:mt-0">"Rules are suggestions from people who stopped experimenting."</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Rule Card 1 -->
+                <div class="bg-paperCard border border-inkBlack/15 p-6 rounded-xl shadow-paper relative hover:border-inkBlack transition">
+                    <span class="font-serif text-5xl text-inkBlack/20 font-bold block mb-2">01</span>
+                    <h3 class="font-sans font-bold text-lg text-inkBlack mb-2">The Novelty Instinct</h3>
+                    <p class="font-sans text-xs text-pencilGray leading-relaxed">
+                        If I encounter a tool, software, or concept I don't understand, I dive into it immediately. Novelty is the highest fuel for creativity.
+                    </p>
+                    <div class="font-hand text-lg text-ballpointBlue mt-4">→ Always stay curious</div>
+                </div>
+
+                <!-- Rule Card 2 -->
+                <div class="bg-paperCard border border-inkBlack/15 p-6 rounded-xl shadow-paper relative hover:border-inkBlack transition">
+                    <span class="font-serif text-5xl text-inkBlack/20 font-bold block mb-2">02</span>
+                    <h3 class="font-sans font-bold text-lg text-inkBlack mb-2">Tactile Prototyping</h3>
+                    <p class="font-sans text-xs text-pencilGray leading-relaxed">
+                        I prefer real working prototypes over long theoretical discussions. Code it, test it, break it, fix it, ship it.
+                    </p>
+                    <div class="font-hand text-lg text-ballpointBlue mt-4">→ Code is clay</div>
+                </div>
+
+                <!-- Rule Card 3 -->
+                <div class="bg-paperCard border border-inkBlack/15 p-6 rounded-xl shadow-paper relative hover:border-inkBlack transition sm:col-span-2 lg:col-span-1">
+                    <span class="font-serif text-5xl text-inkBlack/20 font-bold block mb-2">03</span>
+                    <h3 class="font-sans font-bold text-lg text-inkBlack mb-2">Medellín Roots</h3>
+                    <p class="font-sans text-xs text-pencilGray leading-relaxed">
+                        Growing up in Medellín's dynamic climate and culture gives me a unique perspective on resilience, innovation, and rapid adaptation.
+                    </p>
+                    <div class="font-hand text-lg text-ballpointBlue mt-4">→ Born in the valley 🏔️</div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="projects" class="space-y-12">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b-2 border-inkBlack pb-4">
+                <div>
+                    <span class="font-mono text-xs text-pencilGray uppercase tracking-widest">CHAPTER 02</span>
+                    <h2 class="font-serif text-4xl sm:text-5xl text-inkBlack">Projects & Artifacts</h2>
+                </div>
+                <p class="font-mono text-xs text-pencilGray">Selected work from 2025–2026</p>
+            </div>
+
+            <div class="space-y-8">
+
+                <!-- Project 1: Kinetic Audio Visualizer -->
+                <article class="bg-paperCard border border-inkBlack/20 rounded-2xl p-6 sm:p-8 shadow-paper relative overflow-hidden transition hover:shadow-lift">
+                    <div class="paper-tape absolute -top-3 right-12 w-28 h-6 transform rotate-3"></div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-7 space-y-4">
+                            <div class="flex items-center gap-3">
+                                <span class="font-mono text-xs px-2.5 py-1 bg-inkBlack text-paperBg rounded-full font-bold">PROJECT 01</span>
+                                <span class="font-mono text-xs text-pencilGray">WEB AUDIO / ALGORITHMIC ART</span>
+                            </div>
+
+                            <h3 class="font-serif text-3xl sm:text-4xl text-inkBlack font-normal">
+                                Kymatica Sound Engine
+                            </h3>
+
+                            <p class="font-sans text-sm text-pencilGray leading-relaxed">
+                                A browser-based sound synthesizer and visualizer built to transform real-time ambient noise into kinetic geometric canvas art. Developed during senior high school late-night coding sessions.
+                            </p>
+
+                            <div class="flex flex-wrap gap-2 font-mono text-[11px] pt-2">
+                                <span class="bg-inkBlack/5 px-3 py-1 rounded-md border border-inkBlack/10">JavaScript</span>
+                                <span class="bg-inkBlack/5 px-3 py-1 rounded-md border border-inkBlack/10">Web Audio API</span>
+                                <span class="bg-inkBlack/5 px-3 py-1 rounded-md border border-inkBlack/10">HTML5 Canvas</span>
+                            </div>
+
+                            <div class="pt-4">
+                                <button onclick="openArtifactDetails('kymatica')" class="px-5 py-2.5 bg-inkBlack text-paperBg font-mono text-xs rounded-lg hover:bg-ballpointBlue transition flex items-center gap-2">
+                                    <span>Inspect Work</span>
+                                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Visual Card Feature -->
+                        <div class="lg:col-span-5 bg-paperBg border border-inkBlack/15 rounded-xl p-6 text-center relative flex flex-col items-center justify-center min-h-[200px]">
+                            <div class="w-16 h-16 rounded-full bg-highlighterYellow/80 border border-inkBlack flex items-center justify-center mb-3 text-inkBlack text-2xl animate-pulse">
+                                <i class="fa-solid fa-compact-disc"></i>
+                            </div>
+                            <span class="font-serif text-xl italic text-inkBlack">"Converting frequency into form"</span>
+                            <span class="font-hand text-lg text-ballpointBlue mt-1">Interactive Web Audio</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project 2: High School Senior IoT Science -->
+                <article class="bg-paperCard border border-inkBlack/20 rounded-2xl p-6 sm:p-8 shadow-paper relative overflow-hidden transition hover:shadow-lift">
+                    <div class="paper-tape absolute -top-3 left-12 w-28 h-6 transform -rotate-2"></div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-7 space-y-4">
+                            <div class="flex items-center gap-3">
+                                <span class="font-mono text-xs px-2.5 py-1 bg-ballpointBlue text-white rounded-full font-bold">PROJECT 02</span>
+                                <span class="font-mono text-xs text-pencilGray">HARDWARE / SENIOR SCIENCE</span>
+                            </div>
+
+                            <h3 class="font-serif text-3xl sm:text-4xl text-inkBlack font-normal">
+                                Botanical Neural Sensors
+                            </h3>
+
+                            <p class="font-sans text-sm text-pencilGray leading-relaxed">
+                                High school senior science project: custom ESP32 micro-controllers embedded in local soil in Medellín, measuring humidity and plant stress signals streamed directly to a web interface.
+                            </p>
+
+                            <div class="flex flex-wrap gap-2 font-mono text-[11px] pt-2">
+                                <span class="bg-inkBlack/5 px-3 py-1 rounded-md border border-inkBlack/10">ESP32 / C++</span>
+                                <span class="bg-inkBlack/5 px-3 py-1 rounded-md border border-inkBlack/10">Sensors</span>
+                                <span class="bg-inkBlack/5 px-3 py-1 rounded-md border border-inkBlack/10">Live Dashboard</span>
+                            </div>
+
+                            <div class="pt-4">
+                                <button onclick="openArtifactDetails('botanical')" class="px-5 py-2.5 bg-inkBlack text-paperBg font-mono text-xs rounded-lg hover:bg-ballpointBlue transition flex items-center gap-2">
+                                    <span>Inspect Work</span>
+                                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Visual Card Feature -->
+                        <div class="lg:col-span-5 bg-paperBg border border-inkBlack/15 rounded-xl p-6 text-center relative flex flex-col items-center justify-center min-h-[200px]">
+                            <div class="w-16 h-16 rounded-full bg-emerald-200 border border-inkBlack flex items-center justify-center mb-3 text-inkBlack text-2xl">
+                                <i class="fa-solid fa-seedling"></i>
+                            </div>
+                            <span class="font-serif text-xl italic text-inkBlack">"Listening to local botanical ecosystems"</span>
+                            <span class="font-hand text-lg text-ballpointBlue mt-1">Medellín Soil Mesh</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project 3: Medellín Sound Archives -->
+                <article class="bg-paperCard border border-inkBlack/20 rounded-2xl p-6 sm:p-8 shadow-paper relative overflow-hidden transition hover:shadow-lift">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-7 space-y-4">
+                            <div class="flex items-center gap-3">
+                                <span class="font-mono text-xs px-2.5 py-1 bg-highlighterYellow text-inkBlack rounded-full font-bold">PROJECT 03</span>
+                                <span class="font-mono text-xs text-pencilGray">FIELD SOUND / ARCHIVE</span>
+                            </div>
+
+                            <h3 class="font-serif text-3xl sm:text-4xl text-inkBlack font-normal">
+                                Aburrá Sonic Field Notes
+                            </h3>
+
+                            <p class="font-sans text-sm text-pencilGray leading-relaxed">
+                                An acoustic archive capturing the distinct soundscapes of Medellín—from mountain rainfall on tin roofs to high-altitude Metro Cable car hums.
+                            </p>
+
+                            <div class="flex flex-wrap gap-2 font-mono text-[11px] pt-2">
+                                <span class="bg-inkBlack/5 px-3 py-1 rounded-md border border-inkBlack/10">Acoustic Audio</span>
+                                <span class="bg-inkBlack/5 px-3 py-1 rounded-md border border-inkBlack/10">UI Design</span>
+                            </div>
+
+                            <div class="pt-4">
+                                <button onclick="openArtifactDetails('aburra')" class="px-5 py-2.5 bg-inkBlack text-paperBg font-mono text-xs rounded-lg hover:bg-ballpointBlue transition flex items-center gap-2">
+                                    <span>Inspect Work</span>
+                                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-5 bg-paperBg border border-inkBlack/15 rounded-xl p-6 text-center relative flex flex-col items-center justify-center min-h-[200px]">
+                            <div class="w-16 h-16 rounded-full bg-blue-200 border border-inkBlack flex items-center justify-center mb-3 text-inkBlack text-2xl">
+                                <i class="fa-solid fa-microphone-lines"></i>
+                            </div>
+                            <span class="font-serif text-xl italic text-inkBlack">"Acoustic portrait of the city"</span>
+                            <span class="font-hand text-lg text-ballpointBlue mt-1">Field Audio Journal</span>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <section class="space-y-8 bg-paperCard border border-inkBlack/15 p-8 rounded-2xl shadow-paper relative">
+            <div class="paper-tape absolute -top-3 right-10 w-28 h-6 transform rotate-1"></div>
+
+            <div class="border-b border-inkBlack/10 pb-4">
+                <span class="font-mono text-xs text-pencilGray uppercase tracking-widest">CHAPTER 03</span>
+                <h2 class="font-serif text-4xl text-inkBlack">Toolkit & Experiments</h2>
+                <p class="font-sans text-xs text-pencilGray mt-1">Tools I use to transform raw curiosity into working reality</p>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 font-mono text-xs">
+                <div class="p-3 border border-inkBlack/10 rounded-lg bg-paperBg">
+                    <div class="font-bold text-inkBlack">JavaScript / ES6</div>
+                    <div class="font-hand text-sm text-ballpointBlue">Interactive Canvas</div>
+                </div>
+                <div class="p-3 border border-inkBlack/10 rounded-lg bg-paperBg">
+                    <div class="font-bold text-inkBlack">Web Audio API</div>
+                    <div class="font-hand text-sm text-ballpointBlue">Sound Synths</div>
+                </div>
+                <div class="p-3 border border-inkBlack/10 rounded-lg bg-paperBg">
+                    <div class="font-bold text-inkBlack">Python</div>
+                    <div class="font-hand text-sm text-ballpointBlue">Data & Logic</div>
+                </div>
+                <div class="p-3 border border-inkBlack/10 rounded-lg bg-paperBg">
+                    <div class="font-bold text-inkBlack">HTML5 & Tailwind</div>
+                    <div class="font-hand text-sm text-ballpointBlue">Editorial Layouts</div>
+                </div>
+                <div class="p-3 border border-inkBlack/10 rounded-lg bg-paperBg">
+                    <div class="font-bold text-inkBlack">ESP32 / IoT</div>
+                    <div class="font-hand text-sm text-ballpointBlue">Hardware Sensors</div>
+                </div>
+                <div class="p-3 border border-inkBlack/10 rounded-lg bg-paperBg">
+                    <div class="font-bold text-inkBlack">Figma</div>
+                    <div class="font-hand text-sm text-ballpointBlue">Unruled Wireframes</div>
+                </div>
+                <div class="p-3 border border-inkBlack/10 rounded-lg bg-paperBg">
+                    <div class="font-bold text-inkBlack">Field Audio</div>
+                    <div class="font-hand text-sm text-ballpointBlue">Sonic Sampling</div>
+                </div>
+                <div class="p-3 border border-inkBlack/10 rounded-lg bg-paperBg">
+                    <div class="font-bold text-inkBlack">Senior Year '26</div>
+                    <div class="font-hand text-sm text-ballpointBlue">Daily Experimentation</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="bg-paperCard border border-inkBlack/20 p-8 md:p-12 rounded-2xl shadow-lift relative overflow-hidden">
+            <div class="paper-tape absolute -top-3 left-1/2 transform -translate-x-1/2 w-32 h-6"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                
+                <div class="md:col-span-6 space-y-4">
+                    <span class="font-mono text-xs text-pencilGray uppercase tracking-widest">CHAPTER 04 / TRANSMISSION</span>
+                    <h2 class="font-serif text-4xl sm:text-5xl text-inkBlack">
+                        Let's build something unruled together.
+                    </h2>
+                    <p class="font-sans text-sm text-pencilGray leading-relaxed">
+                        Whether you are an artist, developer, mentor, or recruiter—if you share a passion for novel ideas, send me a transmission.
+                    </p>
+
+                    <div class="pt-2 font-mono text-xs">
+                        <div class="p-3 bg-paperBg border border-inkBlack/10 rounded-lg flex items-center justify-between">
+                            <span class="text-inkBlack font-bold" id="email-text">sebastian.alvarado@example.com</span>
+                            <button onclick="copyContactEmail()" class="px-3 py-1 bg-inkBlack text-paperBg text-[10px] rounded hover:bg-ballpointBlue transition">
+                                Copy Email 📋
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Postcard Form -->
+                <form onsubmit="handlePostcardSubmit(event)" class="md:col-span-6 bg-paperBg border border-inkBlack/15 p-6 rounded-xl space-y-4 shadow-paper">
+                    <div class="border-b border-inkBlack/10 pb-2">
+                        <span class="font-hand text-xl text-ballpointBlue">Digital Postcard to Medellín</span>
+                    </div>
+
+                    <div>
+                        <label class="block font-mono text-[10px] text-pencilGray mb-1">YOUR NAME / SENDER</label>
+                        <input type="text" required placeholder="Who are you?" class="w-full px-3 py-2 bg-paperCard border border-inkBlack/15 rounded font-sans text-xs text-inkBlack focus:outline-none focus:border-inkBlack">
+                    </div>
+
+                    <div>
+                        <label class="block font-mono text-[10px] text-pencilGray mb-1">YOUR MESSAGE / NOVEL IDEA</label>
+                        <textarea required rows="3" placeholder="Share a project, idea, or thought..." class="w-full px-3 py-2 bg-paperCard border border-inkBlack/15 rounded font-sans text-xs text-inkBlack focus:outline-none focus:border-inkBlack"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 bg-inkBlack text-paperBg font-mono text-xs font-bold rounded hover:bg-ballpointBlue transition flex items-center justify-center gap-2">
+                        <span>SEND POSTCARD</span>
+                        <i class="fa-solid fa-paper-plane text-[10px]"></i>
+                    </button>
+                </form>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-inkBlack/10 py-8 text-center font-mono text-xs text-pencilGray">
+        <p>SEBASTIÁN ALVARADO • MEDELLÍN, COLOMBIA • CLASS OF 2026</p>
+        <p class="font-hand text-lg text-ballpointBlue mt-1">"Made with paper thoughts, code, and zero rules."</p>
+    </footer>
+
+    <!-- Artifact Modal -->
+    <div id="modal" class="fixed inset-0 z-50 bg-inkBlack/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-paperBg border-2 border-inkBlack max-w-lg w-full rounded-2xl p-6 sm:p-8 shadow-lift relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-inkBlack font-mono font-bold hover:text-ballpointBlue text-lg">✕</button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <script>
+        // Interactive Canvas Doodle Engine
+        const canvas = document.getElementById('doodle-canvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawingMode = false;
+        let isPainting = false;
+        let brushColor = '#ffe600';
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function toggleDoodleMode() {
+            isDrawingMode = !isDrawingMode;
+            const btnText = document.getElementById('draw-btn-text');
+            const palette = document.getElementById('draw-palette');
+            const btn = document.getElementById('draw-toggle-btn');
+
+            if (isDrawingMode) {
+                canvas.classList.add('active');
+                btnText.textContent = "Exit Drawing";
+                palette.classList.remove('hidden');
+                btn.classList.add('bg-ballpointBlue');
+            } else {
+                canvas.classList.remove('active');
+                btnText.textContent = "Draw / Annotate";
+                palette.classList.add('hidden');
+                btn.classList.remove('bg-ballpointBlue');
+            }
+            playAcousticTone(440);
+        }
+
+        function setBrushColor(color) {
+            brushColor = color;
+            playAcousticTone(523.25);
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            playAcousticTone(300);
+        }
+
+        // Mouse & Touch Drawing Events
+        function startDrawing(e) {
+            if (!isDrawingMode) return;
+            isPainting = true;
+            draw(e);
+        }
+
+        function stopDrawing() {
+            isPainting = false;
+            ctx.beginPath();
+        }
+
+        function draw(e) {
+            if (!isPainting || !isDrawingMode) return;
+
+            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+            ctx.lineWidth = brushColor === '#ffe600' ? 18 : 3;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = brushColor;
+            ctx.globalAlpha = brushColor === '#ffe600' ? 0.4 : 0.9;
+
+            ctx.lineTo(clientX, clientY);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(clientX, clientY);
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mousemove', draw);
+
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchend', stopDrawing);
+        canvas.addEventListener('touchmove', draw);
+
+        // Draggable Sticky Notes Logic
+        document.querySelectorAll('.sticky-paper').forEach(sticky => {
+            let isDragging = false;
+            let startX, startY, origX = 0, origY = 0;
+
+            sticky.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.clientX - origX;
+                startY = e.clientY - origY;
+                playAcousticTone(350);
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                origX = e.clientX - startX;
+                origY = e.clientY - startY;
+                sticky.style.transform = `translate(${origX}px, ${origY}px) rotate(0deg)`;
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                }
+            });
+        });
+
+        // Web Audio Tactile Sound Engine
+        let audioCtx = null;
+        let soundEnabled = false;
+
+        function toggleAcousticAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('audio-icon');
+
+            if (soundEnabled) {
+                audioCtx.resume();
+                icon.className = 'fa-solid fa-volume-high text-ballpointBlue';
+                playAcousticTone(587.33);
+            } else {
+                icon.className = 'fa-solid fa-volume-xmark';
+            }
+        }
+
+        function playAcousticTone(freq) {
+            if (!soundEnabled || !audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.3);
+        }
+
+        // Modal Work Details
+        const artifactDetails = {
+            kymatica: {
+                title: "Kymatica Sound Engine",
+                tag: "WEB AUDIO & CANVAS ART",
+                desc: "An algorithmic software art project that converts acoustic sound frequencies into live kinetic geometry. Built from scratch late at night during senior high school in Medellín."
+            },
+            botanical: {
+                title: "Botanical Neural Sensors",
+                tag: "HARDWARE & IOT SCIENCE",
+                desc: "11th grade senior science project utilizing ESP32 microcontrollers to stream soil moisture and micro-climate conditions directly to an unruled interactive dashboard."
+            },
+            aburra: {
+                title: "Aburrá Sonic Field Notes",
+                tag: "ACOUSTIC SAMPLING & UI",
+                desc: "An acoustic archive mapping Medellín's unique sonic landscape—from mountain storms on brick roofs to cable car winds."
+            }
+        };
+
+        function openArtifactDetails(key) {
+            const data = artifactDetails[key];
+            if (!data) return;
+
+            const modalContent = document.getElementById('modal-content');
+            modalContent.innerHTML = `
+                <span class="font-mono text-[10px] text-pencilGray uppercase tracking-widest">${data.tag}</span>
+                <h3 class="font-serif text-3xl text-inkBlack my-2">${data.title}</h3>
+                <p class="font-sans text-xs text-pencilGray leading-relaxed mb-6">${data.desc}</p>
+                <div class="flex justify-between items-center border-t border-inkBlack/10 pt-4">
+                    <span class="font-hand text-lg text-ballpointBlue">Medellín Project 2026</span>
+                    <button onclick="closeModal()" class="px-4 py-1.5 bg-inkBlack text-paperBg font-mono text-xs rounded hover:bg-ballpointBlue transition">Close</button>
+                </div>
+            `;
+            document.getElementById('modal').classList.remove('hidden');
+            playAcousticTone(500);
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+        }
+
+        function copyContactEmail() {
+            document.execCommand('copy');
+            playAcousticTone(650);
+            const emailText = document.getElementById('email-text');
+            const original = emailText.textContent;
+            emailText.textContent = "COPIED TO CLIPBOARD!";
+            setTimeout(() => emailText.textContent = original, 2000);
+        }
+
+        function handlePostcardSubmit(e) {
+            e.preventDefault();
+            playAcousticTone(700);
+            alert("Postcard received! Sebastián will reply to your transmission soon.");
+            e.target.reset();
+        }
+    </script>
+</body>
+</html>
